@@ -22,166 +22,244 @@
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
         }
 
-        .watermark {
+        /* Score Selection Page */
+        #score-page {
             position: fixed;
-            top: 20px;
-            right: 20px;
-            color: white;
-            font-size: 14px;
-            font-weight: 600;
-            z-index: 1000;
-            background: rgba(0, 0, 0, 0.3);
-            backdrop-filter: blur(10px);
-            padding: 8px 16px;
-            border-radius: 20px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            pointer-events: none;
-        }
-
-        .place-ar-btn {
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            z-index: 1001;
-            padding: 28px 56px;
-            background: linear-gradient(135deg, #A50044, #00529F);
-            border: 4px solid white;
-            border-radius: 24px;
-            color: white;
-            font-size: 28px;
-            font-weight: 900;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            cursor: pointer;
-            box-shadow: 0 12px 48px rgba(0, 0, 0, 0.7);
-        }
-
-        .place-ar-btn:active {
-            transform: translate(-50%, -50%) scale(0.95);
-        }
-
-        .place-ar-btn.hidden {
-            display: none;
-        }
-
-        .placement-hint {
-            position: fixed;
-            bottom: 140px;
-            left: 50%;
-            transform: translateX(-50%);
-            z-index: 1001;
-            background: rgba(0, 0, 0, 0.7);
-            backdrop-filter: blur(10px);
-            padding: 12px 24px;
-            border-radius: 20px;
-            color: white;
-            font-size: 14px;
-            font-weight: 600;
-            text-align: center;
-            pointer-events: none;
-        }
-
-        .placement-hint.hidden {
-            display: none;
-        }
-
-        .controls {
-            position: fixed;
-            bottom: 0;
+            top: 0;
             left: 0;
-            right: 0;
-            padding: 20px;
-            z-index: 1000;
+            width: 100vw;
+            height: 100vh;
+            background: linear-gradient(135deg, #4A148C 0%, #1A237E 50%, #B71C1C 100%);
             display: flex;
             flex-direction: column;
-            gap: 15px;
             align-items: center;
+            justify-content: center;
+            z-index: 2000;
+        }
+
+        #score-page.hidden {
+            display: none;
+        }
+
+        .header {
+            display: flex;
+            align-items: center;
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+
+        .header img {
+            height: 60px;
+        }
+
+        .card {
+            background: white;
+            border-radius: 24px;
+            padding: 40px 30px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+            max-width: 400px;
+            width: 90%;
+        }
+
+        .card-title {
+            text-align: center;
+            font-size: 24px;
+            font-weight: 800;
+            margin-bottom: 10px;
+            color: #000;
+        }
+
+        .card-subtitle {
+            text-align: center;
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 30px;
+            color: #333;
+        }
+
+        .teams-container {
+            display: flex;
+            gap: 30px;
+            justify-content: center;
+            margin-bottom: 30px;
+        }
+
+        .team-box {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 15px;
+            padding: 20px;
+            border-radius: 16px;
+            border: 3px solid #e0e0e0;
+        }
+
+        .team-box.selected {
+            border-color: #4CAF50;
+            border-width: 4px;
+            background: #f1f8f4;
+        }
+
+        .team-box.barcelona {
+            border-top: 4px solid #A50044;
+        }
+
+        .team-box.realmadrid {
+            border-top: 4px solid #00529F;
+        }
+
+        .team-logo {
+            width: 80px;
+            height: 80px;
+            border-radius: 12px;
+            background: #f5f5f5;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .team-logo img {
+            width: 70px;
+            height: 70px;
+        }
+
+        .vs-text {
+            font-size: 20px;
+            font-weight: 900;
+            color: #666;
+            align-self: center;
+        }
+
+        .team-name {
+            font-size: 12px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: #333;
+        }
+
+        .score-input {
+            font-size: 48px;
+            font-weight: 900;
+            text-align: center;
+            color: #000;
+            min-width: 80px;
         }
 
         .score-controls {
             display: flex;
-            gap: 20px;
-            width: 100%;
-            max-width: 500px;
-            justify-content: space-between;
-        }
-
-        .team-control {
-            flex: 1;
-            background: rgba(0, 0, 0, 0.6);
-            backdrop-filter: blur(20px);
-            border-radius: 16px;
-            padding: 15px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-            align-items: center;
-        }
-
-        .team-control.barcelona { border-top: 3px solid #A50044; }
-        .team-control.realmadrid { border-top: 3px solid #00529F; }
-
-        .team-name {
-            color: white;
-            font-size: 12px;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
-        .score-display {
-            color: white;
-            font-size: 32px;
-            font-weight: 700;
-            min-width: 50px;
-            text-align: center;
-        }
-
-        .score-buttons {
-            display: flex;
             gap: 10px;
         }
 
-        .score-btn {
-            width: 50px;
-            height: 50px;
+        .score-btn-page {
+            width: 45px;
+            height: 45px;
             border-radius: 12px;
             border: none;
-            background: rgba(255, 255, 255, 0.15);
-            color: white;
+            background: #f0f0f0;
+            color: #333;
             font-size: 24px;
             font-weight: 700;
             cursor: pointer;
             transition: all 0.2s;
         }
 
-        .score-btn:active {
+        .score-btn-page:active {
             transform: scale(0.95);
+            background: #e0e0e0;
         }
 
-        .barcelona .score-btn { background: rgba(165, 0, 68, 0.4); }
-        .barcelona .score-btn:active { background: rgba(165, 0, 68, 0.6); }
-        .realmadrid .score-btn { background: rgba(0, 82, 159, 0.4); }
-        .realmadrid .score-btn:active { background: rgba(0, 82, 159, 0.6); }
-
-        .save-btn {
+        .view-ar-btn {
             width: 100%;
-            max-width: 300px;
-            padding: 16px 32px;
-            background: linear-gradient(135deg, rgba(165, 0, 68, 0.8), rgba(0, 82, 159, 0.8));
-            border: 2px solid rgba(255, 255, 255, 0.2);
+            padding: 18px;
+            background: #000;
+            border: none;
             border-radius: 16px;
             color: white;
             font-size: 16px;
             font-weight: 700;
             text-transform: uppercase;
             cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
         }
 
-        .save-btn:active {
+        .view-ar-btn:active {
             transform: scale(0.98);
+        }
+
+        .winner-badge {
+            background: #4CAF50;
+            color: white;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 10px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* AR View Page */
+        #ar-page {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            display: none;
+            z-index: 1000;
+        }
+
+        #ar-page.active {
+            display: block;
+        }
+
+        .back-btn {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(10px);
+            border: none;
+            color: white;
+            font-size: 24px;
+            cursor: pointer;
+            z-index: 1001;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .place-btn {
+            position: fixed;
+            bottom: 40px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 1001;
+            padding: 20px 50px;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(10px);
+            border: 2px solid white;
+            border-radius: 50px;
+            color: white;
+            font-size: 18px;
+            font-weight: 700;
+            text-transform: uppercase;
+            cursor: pointer;
+        }
+
+        .place-btn.hidden {
+            display: none;
+        }
+
+        .place-btn:active {
+            transform: translateX(-50%) scale(0.95);
         }
 
         .a-enter-vr-button {
@@ -190,266 +268,294 @@
     </style>
 </head>
 <body>
-    <div class="watermark">✨ by Augmento</div>
-
-    <button class="place-ar-btn" id="place-ar-btn" onclick="placeARPrediction()">
-        🎯 TAP TO PLACE
-    </button>
-
-    <div class="placement-hint" id="placement-hint">
-        Point camera where you want to place the prediction
-    </div>
-
-    <a-scene
-        embedded
-        arjs="sourceType: webcam; debugUIEnabled: false;"
-        vr-mode-ui="enabled: false"
-        renderer="logarithmicDepthBuffer: true; precision: medium; antialias: true;">
-
-        <a-camera id="camera" position="0 0 0">
-            <!-- Placement reticle - always in center of screen -->
-            <a-ring
-                id="reticle"
-                position="0 0 -0.5"
-                radius-inner="0.01"
-                radius-outer="0.015"
-                color="#00FF00"
-                opacity="0.8"
-                material="shader: flat">
-            </a-ring>
-        </a-camera>
-
-        <!-- AR Content in WORLD SPACE - will be positioned by raycast -->
-        <a-entity id="ar-content" visible="false">
-
-            <!-- Platform base -->
-            <a-circle
-                position="0 0.01 0"
-                radius="1.2"
-                rotation="-90 0 0"
-                color="#1a1a1a"
-                opacity="0.8"
-                material="shader: flat; side: double">
-            </a-circle>
-
-            <!-- Barcelona Logo -->
-            <a-entity position="-0.5 0.3 0.3">
-                <a-cylinder position="0 0 0" radius="0.15" height="0.05" color="#A50044"></a-cylinder>
-                <a-cylinder position="0 0.1 0" radius="0.02" height="0.15" color="#A50044"></a-cylinder>
-                <a-box position="0 0.18 0" width="0.3" height="0.3" depth="0.05" color="#A50044"></a-box>
-                <a-image src="assets/barcelona.png" width="0.28" height="0.28" position="0 0.18 0.03" transparent="true"></a-image>
-                <a-animation attribute="rotation" from="0 0 0" to="0 360 0" dur="8000" repeat="indefinite" easing="linear"></a-animation>
-            </a-entity>
-
-            <!-- Real Madrid Logo -->
-            <a-entity position="0.5 0.3 0.3">
-                <a-cylinder position="0 0 0" radius="0.15" height="0.05" color="#00529F"></a-cylinder>
-                <a-cylinder position="0 0.1 0" radius="0.02" height="0.15" color="#00529F"></a-cylinder>
-                <a-box position="0 0.18 0" width="0.3" height="0.3" depth="0.05" color="#00529F"></a-box>
-                <a-image src="assets/realmadrid.png" width="0.28" height="0.28" position="0 0.18 0.03" transparent="true"></a-image>
-                <a-animation attribute="rotation" from="0 0 0" to="0 360 0" dur="8000" repeat="indefinite" easing="linear"></a-animation>
-            </a-entity>
-
-            <!-- VS Text -->
-            <a-text
-                value="VS"
-                position="0 0.65 0.3"
-                align="center"
-                color="#FFFFFF"
-                width="2"
-                material="shader: flat">
-            </a-text>
-
-            <!-- Barcelona Score -->
-            <a-entity id="barcelona-score-3d" position="-0.5 0.25 -0.1"></a-entity>
-
-            <!-- Dash -->
-            <a-box position="0 0.3 -0.1" width="0.1" height="0.03" depth="0.03" color="#FFFFFF" material="shader: flat; side: double"></a-box>
-
-            <!-- Real Madrid Score -->
-            <a-entity id="realmadrid-score-3d" position="0.5 0.25 -0.1"></a-entity>
-
-        </a-entity>
-
-        <a-light type="ambient" intensity="1.5"></a-light>
-        <a-light type="directional" intensity="1" position="1 2 1"></a-light>
-
-    </a-scene>
-
-    <div class="controls">
-        <div class="score-controls">
-            <div class="team-control barcelona">
-                <div class="team-name">Barcelona</div>
-                <div class="score-display" id="barcelona-score-ui">4</div>
-                <div class="score-buttons">
-                    <button class="score-btn" onclick="adjustScore('barcelona', -1)">−</button>
-                    <button class="score-btn" onclick="adjustScore('barcelona', 1)">+</button>
-                </div>
-            </div>
-
-            <div class="team-control realmadrid">
-                <div class="team-name">Real Madrid</div>
-                <div class="score-display" id="realmadrid-score-ui">2</div>
-                <div class="score-buttons">
-                    <button class="score-btn" onclick="adjustScore('realmadrid', -1)">−</button>
-                    <button class="score-btn" onclick="adjustScore('realmadrid', 1)">+</button>
-                </div>
-            </div>
+    <!-- Score Selection Page -->
+    <div id="score-page">
+        <div class="header">
+            <svg width="120" height="40" viewBox="0 0 120 40" fill="white">
+                <text x="10" y="30" font-size="24" font-weight="bold">augmento</text>
+            </svg>
+            <svg width="120" height="40" viewBox="0 0 120 40" fill="white">
+                <text x="10" y="30" font-size="20" font-weight="bold">SIDEMEN</text>
+            </svg>
         </div>
 
-        <button class="save-btn" onclick="savePrediction()">📸 Save Prediction</button>
+        <div class="card">
+            <div class="card-title">Pick a winner!</div>
+            <div class="card-subtitle">Share your predictions and WIN!</div>
+
+            <div class="teams-container">
+                <div class="team-box barcelona" id="team-barcelona">
+                    <div class="team-logo">
+                        <img src="assets/barcelona.png" alt="Barcelona" onerror="this.style.display='none'">
+                    </div>
+                    <div class="team-name">Barcelona</div>
+                    <div class="score-input" id="score-barcelona">4</div>
+                    <div class="score-controls">
+                        <button class="score-btn-page" onclick="adjustScorePage('barcelona', -1)">−</button>
+                        <button class="score-btn-page" onclick="adjustScorePage('barcelona', 1)">+</button>
+                    </div>
+                    <div class="winner-badge" id="winner-barcelona">WINNER!</div>
+                </div>
+
+                <div class="vs-text">VS</div>
+
+                <div class="team-box realmadrid" id="team-realmadrid">
+                    <div class="team-logo">
+                        <img src="assets/realmadrid.png" alt="Real Madrid" onerror="this.style.display='none'">
+                    </div>
+                    <div class="team-name">Real Madrid</div>
+                    <div class="score-input" id="score-realmadrid">2</div>
+                    <div class="score-controls">
+                        <button class="score-btn-page" onclick="adjustScorePage('realmadrid', -1)">−</button>
+                        <button class="score-btn-page" onclick="adjustScorePage('realmadrid', 1)">+</button>
+                    </div>
+                    <div class="winner-badge" id="winner-realmadrid" style="visibility: hidden;">WINNER!</div>
+                </div>
+            </div>
+
+            <button class="view-ar-btn" onclick="openARView()">
+                📷 VIEW SCORE IN AR
+            </button>
+        </div>
+    </div>
+
+    <!-- AR Camera View Page -->
+    <div id="ar-page">
+        <button class="back-btn" onclick="closeARView()">←</button>
+        <button class="place-btn" id="place-btn" onclick="placeARContent()">🎯 TAP TO PLACE</button>
+
+        <a-scene
+            id="ar-scene"
+            embedded
+            arjs="sourceType: webcam; debugUIEnabled: false;"
+            vr-mode-ui="enabled: false"
+            renderer="logarithmicDepthBuffer: true; precision: medium; antialias: true;">
+
+            <a-camera id="camera" position="0 0 0">
+                <a-ring
+                    id="reticle"
+                    position="0 0 -0.5"
+                    radius-inner="0.01"
+                    radius-outer="0.015"
+                    color="#00FF00"
+                    opacity="0.8"
+                    material="shader: flat">
+                </a-ring>
+            </a-camera>
+
+            <!-- AR Content in world space -->
+            <a-entity id="ar-content" visible="false">
+
+                <!-- Platform -->
+                <a-circle
+                    position="0 0.01 0"
+                    radius="1.5"
+                    rotation="-90 0 0"
+                    color="#333333"
+                    opacity="0.5"
+                    material="shader: flat; side: double">
+                </a-circle>
+
+                <!-- Barcelona Side -->
+                <a-entity position="-0.8 0.1 0">
+                    <!-- Logo -->
+                    <a-cylinder position="0 0.6 0" radius="0.2" height="0.05" color="#A50044"></a-cylinder>
+                    <a-box position="0 0.7 0" width="0.35" height="0.35" depth="0.05" color="#A50044"></a-box>
+                    <a-image src="assets/barcelona.png" width="0.33" height="0.33" position="0 0.7 0.03" transparent="true"></a-image>
+                    <a-animation attribute="rotation" from="0 0 0" to="0 360 0" dur="8000" repeat="indefinite" easing="linear"></a-animation>
+                </a-entity>
+
+                <!-- Barcelona 3D Score -->
+                <a-entity id="barcelona-score-3d" position="-0.8 0 0"></a-entity>
+
+                <!-- Real Madrid Side -->
+                <a-entity position="0.8 0.1 0">
+                    <!-- Logo -->
+                    <a-cylinder position="0 0.6 0" radius="0.2" height="0.05" color="#00529F"></a-cylinder>
+                    <a-box position="0 0.7 0" width="0.35" height="0.35" depth="0.05" color="#00529F"></a-box>
+                    <a-image src="assets/realmadrid.png" width="0.33" height="0.33" position="0 0.7 0.03" transparent="true"></a-image>
+                    <a-animation attribute="rotation" from="0 0 0" to="0 360 0" dur="8000" repeat="indefinite" easing="linear"></a-animation>
+                </a-entity>
+
+                <!-- Real Madrid 3D Score -->
+                <a-entity id="realmadrid-score-3d" position="0.8 0 0"></a-entity>
+
+                <!-- Dash -->
+                <a-box position="0 0.1 0" width="0.15" height="0.05" depth="0.05" color="#FFFFFF" material="shader: flat"></a-box>
+
+            </a-entity>
+
+            <a-light type="ambient" intensity="1.5"></a-light>
+            <a-light type="directional" intensity="1.2" position="1 2 1"></a-light>
+
+        </a-scene>
     </div>
 
     <script>
         let scores = { barcelona: 4, realmadrid: 2 };
         let arPlaced = false;
 
-        // Seven-segment display patterns
-        const SEGMENTS = {
-            0: ['top', 'topRight', 'bottomRight', 'bottom', 'bottomLeft', 'topLeft'],
-            1: ['topRight', 'bottomRight'],
-            2: ['top', 'topRight', 'middle', 'bottomLeft', 'bottom'],
-            3: ['top', 'topRight', 'middle', 'bottomRight', 'bottom'],
-            4: ['topLeft', 'middle', 'topRight', 'bottomRight'],
-            5: ['top', 'topLeft', 'middle', 'bottomRight', 'bottom'],
-            6: ['top', 'topLeft', 'middle', 'bottomLeft', 'bottom', 'bottomRight'],
-            7: ['top', 'topRight', 'bottomRight'],
-            8: ['top', 'topRight', 'bottomRight', 'bottom', 'bottomLeft', 'topLeft', 'middle'],
-            9: ['top', 'topRight', 'middle', 'topLeft', 'bottomRight', 'bottom']
-        };
+        // Custom 3D Text Component with extrusion
+        AFRAME.registerComponent('extruded-text', {
+            schema: {
+                value: { type: 'string', default: '0' },
+                size: { type: 'number', default: 0.5 },
+                depth: { type: 'number', default: 0.1 },
+                color: { type: 'color', default: '#FFFFFF' }
+            },
+            init: function() {
+                this.createText();
+            },
+            update: function() {
+                this.createText();
+            },
+            createText: function() {
+                const el = this.el;
+                const data = this.data;
 
-        // Segment configuration - WHITE color for production
-        const SEGMENT_CONFIG = {
-            top:          { x: 0,     y: 0.15,  z: 0, w: 0.12, h: 0.03, d: 0.03, rx: 0, ry: 0, rz: 0 },
-            topRight:     { x: 0.06,  y: 0.08,  z: 0, w: 0.09, h: 0.03, d: 0.03, rx: 0, ry: 0, rz: 90 },
-            bottomRight:  { x: 0.06,  y: -0.08, z: 0, w: 0.09, h: 0.03, d: 0.03, rx: 0, ry: 0, rz: 90 },
-            bottom:       { x: 0,     y: -0.15, z: 0, w: 0.12, h: 0.03, d: 0.03, rx: 0, ry: 0, rz: 0 },
-            bottomLeft:   { x: -0.06, y: -0.08, z: 0, w: 0.09, h: 0.03, d: 0.03, rx: 0, ry: 0, rz: 90 },
-            topLeft:      { x: -0.06, y: 0.08,  z: 0, w: 0.09, h: 0.03, d: 0.03, rx: 0, ry: 0, rz: 90 },
-            middle:       { x: 0,     y: 0,     z: 0, w: 0.12, h: 0.03, d: 0.03, rx: 0, ry: 0, rz: 0 }
-        };
+                // Clear previous
+                while (el.firstChild) {
+                    el.removeChild(el.firstChild);
+                }
 
-        function createNumber(num, container, color) {
-            console.log(`Creating 3D number ${num} in ${color}`);
+                // Create layers for depth effect
+                const layers = 10;
+                for (let i = 0; i < layers; i++) {
+                    const text = document.createElement('a-text');
+                    text.setAttribute('value', data.value);
+                    text.setAttribute('align', 'center');
+                    text.setAttribute('color', data.color);
+                    text.setAttribute('width', data.size * 2);
+                    text.setAttribute('position', `0 0 ${i * (data.depth / layers)}`);
+                    text.setAttribute('material', 'shader: flat');
+                    el.appendChild(text);
+                }
 
-            // Clear existing
-            while (container.firstChild) {
-                container.removeChild(container.firstChild);
+                // Front face (brightest)
+                const frontText = document.createElement('a-text');
+                frontText.setAttribute('value', data.value);
+                frontText.setAttribute('align', 'center');
+                frontText.setAttribute('color', '#FFFFFF');
+                frontText.setAttribute('width', data.size * 2);
+                frontText.setAttribute('position', `0 0 ${data.depth}`);
+                frontText.setAttribute('material', 'shader: flat');
+                el.appendChild(frontText);
             }
+        });
 
-            const segments = SEGMENTS[num];
+        function adjustScorePage(team, delta) {
+            scores[team] = Math.max(0, Math.min(99, scores[team] + delta));
+            document.getElementById(`score-${team}`).textContent = scores[team];
 
-            segments.forEach((segName) => {
-                const cfg = SEGMENT_CONFIG[segName];
-
-                const box = document.createElement('a-box');
-                box.setAttribute('position', `${cfg.x} ${cfg.y} ${cfg.z}`);
-                box.setAttribute('rotation', `${cfg.rx} ${cfg.ry} ${cfg.rz}`);
-                box.setAttribute('width', cfg.w);
-                box.setAttribute('height', cfg.h);
-                box.setAttribute('depth', cfg.d);
-                box.setAttribute('color', color);
-                box.setAttribute('material', 'shader: flat; side: double');
-
-                container.appendChild(box);
-            });
-
-            console.log(`✓ Number ${num} complete: ${segments.length} segments`);
+            // Update winner badge
+            if (scores.barcelona > scores.realmadrid) {
+                document.getElementById('winner-barcelona').style.visibility = 'visible';
+                document.getElementById('winner-realmadrid').style.visibility = 'hidden';
+                document.getElementById('team-barcelona').classList.add('selected');
+                document.getElementById('team-realmadrid').classList.remove('selected');
+            } else if (scores.realmadrid > scores.barcelona) {
+                document.getElementById('winner-barcelona').style.visibility = 'hidden';
+                document.getElementById('winner-realmadrid').style.visibility = 'visible';
+                document.getElementById('team-barcelona').classList.remove('selected');
+                document.getElementById('team-realmadrid').classList.add('selected');
+            } else {
+                document.getElementById('winner-barcelona').style.visibility = 'hidden';
+                document.getElementById('winner-realmadrid').style.visibility = 'hidden';
+                document.getElementById('team-barcelona').classList.remove('selected');
+                document.getElementById('team-realmadrid').classList.remove('selected');
+            }
         }
 
-        function placeARPrediction() {
-            console.log('🎯 Placing AR prediction in world space...');
+        function openARView() {
+            console.log('Opening AR view...');
+            document.getElementById('score-page').classList.add('hidden');
+            document.getElementById('ar-page').classList.add('active');
+
+            // Initialize AR scene
+            const scene = document.getElementById('ar-scene');
+            if (scene && scene.hasLoaded) {
+                console.log('AR scene ready');
+            }
+        }
+
+        function closeARView() {
+            console.log('Closing AR view...');
+            document.getElementById('ar-page').classList.remove('active');
+            document.getElementById('score-page').classList.remove('hidden');
+
+            // Reset placement
+            const arContent = document.getElementById('ar-content');
+            arContent.setAttribute('visible', 'false');
+            document.getElementById('place-btn').classList.remove('hidden');
+            document.getElementById('reticle').setAttribute('visible', 'true');
+            arPlaced = false;
+        }
+
+        function placeARContent() {
+            console.log('Placing AR content in world space...');
 
             const camera = document.getElementById('camera');
             const arContent = document.getElementById('ar-content');
-            const barcelonaContainer = document.getElementById('barcelona-score-3d');
-            const realmadridContainer = document.getElementById('realmadrid-score-3d');
-            const placeBtn = document.getElementById('place-ar-btn');
+            const placeBtn = document.getElementById('place-btn');
             const reticle = document.getElementById('reticle');
-            const hint = document.getElementById('placement-hint');
 
-            // Get camera position and rotation
+            // Get camera position and direction
             const cameraPos = camera.object3D.position;
-            const cameraRot = camera.object3D.rotation;
-
-            // Calculate placement position 2 meters in front of camera
             const distance = 2;
             const direction = new THREE.Vector3(0, 0, -1);
             direction.applyQuaternion(camera.object3D.quaternion);
 
             const placePos = new THREE.Vector3(
                 cameraPos.x + direction.x * distance,
-                cameraPos.y + direction.y * distance - 0.5, // Slightly below eye level
+                cameraPos.y + direction.y * distance - 0.3,
                 cameraPos.z + direction.z * distance
             );
 
-            // Position AR content in world space
+            // Position content in world space
             arContent.object3D.position.copy(placePos);
-
-            // Make content face the camera
             arContent.object3D.lookAt(cameraPos);
-            arContent.object3D.rotation.x = 0; // Keep upright
-
-            // Show AR content
-            arContent.setAttribute('visible', 'true');
+            arContent.object3D.rotation.x = 0;
 
             // Create 3D numbers
-            createNumber(scores.barcelona, barcelonaContainer, '#FFFFFF');
-            createNumber(scores.realmadrid, realmadridContainer, '#FFFFFF');
+            create3DNumber(scores.barcelona, 'barcelona-score-3d');
+            create3DNumber(scores.realmadrid, 'realmadrid-score-3d');
 
-            // Hide UI elements
+            // Show content
+            arContent.setAttribute('visible', 'true');
             placeBtn.classList.add('hidden');
-            hint.classList.add('hidden');
             reticle.setAttribute('visible', 'false');
-
             arPlaced = true;
 
-            console.log('🎉 AR prediction placed in real world at:', placePos);
+            console.log('AR content placed at:', placePos);
         }
 
-        function adjustScore(team, delta) {
-            scores[team] = Math.max(0, Math.min(9, scores[team] + delta));
-            document.getElementById(`${team}-score-ui`).textContent = scores[team];
+        function create3DNumber(num, containerId) {
+            const container = document.getElementById(containerId);
 
-            if (arPlaced) {
-                const container = document.getElementById(`${team}-score-3d`);
-                createNumber(scores[team], container, '#FFFFFF');
+            // Clear existing
+            while (container.firstChild) {
+                container.removeChild(container.firstChild);
             }
+
+            // Create extruded text
+            const text = document.createElement('a-entity');
+            text.setAttribute('extruded-text', {
+                value: num.toString(),
+                size: 0.6,
+                depth: 0.15,
+                color: '#FFFFFF'
+            });
+
+            container.appendChild(text);
+
+            console.log(`Created 3D number ${num} in ${containerId}`);
         }
 
-        function savePrediction() {
-            const controls = document.querySelector('.controls');
-            const placeBtn = document.getElementById('place-ar-btn');
+        console.log('AR Football Predictions ready');
+        console.log('Set your score and tap VIEW SCORE IN AR');
 
-            controls.style.display = 'none';
-            if (!placeBtn.classList.contains('hidden')) placeBtn.style.display = 'none';
-
-            setTimeout(() => {
-                const scene = document.querySelector('a-scene');
-                const canvas = scene.canvas || scene.querySelector('canvas');
-
-                if (canvas) {
-                    canvas.toBlob((blob) => {
-                        if (blob) {
-                            const url = URL.createObjectURL(blob);
-                            const link = document.createElement('a');
-                            link.href = url;
-                            link.download = `prediction-${scores.barcelona}-${scores.realmadrid}.png`;
-                            document.body.appendChild(link);
-                            link.click();
-                            document.body.removeChild(link);
-                            URL.revokeObjectURL(url);
-                        }
-                        controls.style.display = 'flex';
-                    }, 'image/png');
-                } else {
-                    controls.style.display = 'flex';
-                }
-            }, 200);
-        }
-
-        console.log('🚀 AR Football Predictions ready');
-        console.log('Tap PLACE NOW to start');
+        // Initialize winner on load
+        adjustScorePage('barcelona', 0);
     </script>
 </body>
 </html>
