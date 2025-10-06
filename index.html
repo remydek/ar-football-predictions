@@ -65,6 +65,27 @@
             display: none;
         }
 
+        .placement-hint {
+            position: fixed;
+            bottom: 140px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 1001;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(10px);
+            padding: 12px 24px;
+            border-radius: 20px;
+            color: white;
+            font-size: 14px;
+            font-weight: 600;
+            text-align: center;
+            pointer-events: none;
+        }
+
+        .placement-hint.hidden {
+            display: none;
+        }
+
         .controls {
             position: fixed;
             bottom: 0;
@@ -172,8 +193,12 @@
     <div class="watermark">✨ by Augmento</div>
 
     <button class="place-ar-btn" id="place-ar-btn" onclick="placeARPrediction()">
-        🎯 PLACE NOW
+        🎯 TAP TO PLACE
     </button>
+
+    <div class="placement-hint" id="placement-hint">
+        Point camera where you want to place the prediction
+    </div>
 
     <a-scene
         embedded
@@ -181,59 +206,70 @@
         vr-mode-ui="enabled: false"
         renderer="logarithmicDepthBuffer: true; precision: medium; antialias: true;">
 
-        <a-camera>
-            <!-- AR Content INSIDE camera -->
-            <a-entity id="ar-content" position="0 0 -2" visible="false">
-
-                <!-- Platform base -->
-                <a-circle
-                    position="0 -0.3 0"
-                    radius="1.2"
-                    rotation="-90 0 0"
-                    color="#1a1a1a"
-                    opacity="0.8"
-                    material="shader: flat; side: double">
-                </a-circle>
-
-                <!-- Barcelona Logo -->
-                <a-entity position="-0.5 0 0.3">
-                    <a-cylinder position="0 0 0" radius="0.15" height="0.05" color="#A50044"></a-cylinder>
-                    <a-cylinder position="0 0.1 0" radius="0.02" height="0.15" color="#A50044"></a-cylinder>
-                    <a-box position="0 0.18 0" width="0.3" height="0.3" depth="0.05" color="#A50044"></a-box>
-                    <a-image src="assets/barcelona.png" width="0.28" height="0.28" position="0 0.18 0.03" transparent="true"></a-image>
-                    <a-animation attribute="rotation" from="0 0 0" to="0 360 0" dur="8000" repeat="indefinite" easing="linear"></a-animation>
-                </a-entity>
-
-                <!-- Real Madrid Logo -->
-                <a-entity position="0.5 0 0.3">
-                    <a-cylinder position="0 0 0" radius="0.15" height="0.05" color="#00529F"></a-cylinder>
-                    <a-cylinder position="0 0.1 0" radius="0.02" height="0.15" color="#00529F"></a-cylinder>
-                    <a-box position="0 0.18 0" width="0.3" height="0.3" depth="0.05" color="#00529F"></a-box>
-                    <a-image src="assets/realmadrid.png" width="0.28" height="0.28" position="0 0.18 0.03" transparent="true"></a-image>
-                    <a-animation attribute="rotation" from="0 0 0" to="0 360 0" dur="8000" repeat="indefinite" easing="linear"></a-animation>
-                </a-entity>
-
-                <!-- VS Text -->
-                <a-text
-                    value="VS"
-                    position="0 0.35 0.3"
-                    align="center"
-                    color="#FFFFFF"
-                    width="2"
-                    material="shader: flat">
-                </a-text>
-
-                <!-- Barcelona Score -->
-                <a-entity id="barcelona-score-3d" position="-0.5 -0.05 -0.1"></a-entity>
-
-                <!-- Dash -->
-                <a-box position="0 0 -0.1" width="0.1" height="0.03" depth="0.03" color="#FFFFFF" material="shader: flat; side: double"></a-box>
-
-                <!-- Real Madrid Score -->
-                <a-entity id="realmadrid-score-3d" position="0.5 -0.05 -0.1"></a-entity>
-
-            </a-entity>
+        <a-camera id="camera" position="0 0 0">
+            <!-- Placement reticle - always in center of screen -->
+            <a-ring
+                id="reticle"
+                position="0 0 -0.5"
+                radius-inner="0.01"
+                radius-outer="0.015"
+                color="#00FF00"
+                opacity="0.8"
+                material="shader: flat">
+            </a-ring>
         </a-camera>
+
+        <!-- AR Content in WORLD SPACE - will be positioned by raycast -->
+        <a-entity id="ar-content" visible="false">
+
+            <!-- Platform base -->
+            <a-circle
+                position="0 0.01 0"
+                radius="1.2"
+                rotation="-90 0 0"
+                color="#1a1a1a"
+                opacity="0.8"
+                material="shader: flat; side: double">
+            </a-circle>
+
+            <!-- Barcelona Logo -->
+            <a-entity position="-0.5 0.3 0.3">
+                <a-cylinder position="0 0 0" radius="0.15" height="0.05" color="#A50044"></a-cylinder>
+                <a-cylinder position="0 0.1 0" radius="0.02" height="0.15" color="#A50044"></a-cylinder>
+                <a-box position="0 0.18 0" width="0.3" height="0.3" depth="0.05" color="#A50044"></a-box>
+                <a-image src="assets/barcelona.png" width="0.28" height="0.28" position="0 0.18 0.03" transparent="true"></a-image>
+                <a-animation attribute="rotation" from="0 0 0" to="0 360 0" dur="8000" repeat="indefinite" easing="linear"></a-animation>
+            </a-entity>
+
+            <!-- Real Madrid Logo -->
+            <a-entity position="0.5 0.3 0.3">
+                <a-cylinder position="0 0 0" radius="0.15" height="0.05" color="#00529F"></a-cylinder>
+                <a-cylinder position="0 0.1 0" radius="0.02" height="0.15" color="#00529F"></a-cylinder>
+                <a-box position="0 0.18 0" width="0.3" height="0.3" depth="0.05" color="#00529F"></a-box>
+                <a-image src="assets/realmadrid.png" width="0.28" height="0.28" position="0 0.18 0.03" transparent="true"></a-image>
+                <a-animation attribute="rotation" from="0 0 0" to="0 360 0" dur="8000" repeat="indefinite" easing="linear"></a-animation>
+            </a-entity>
+
+            <!-- VS Text -->
+            <a-text
+                value="VS"
+                position="0 0.65 0.3"
+                align="center"
+                color="#FFFFFF"
+                width="2"
+                material="shader: flat">
+            </a-text>
+
+            <!-- Barcelona Score -->
+            <a-entity id="barcelona-score-3d" position="-0.5 0.25 -0.1"></a-entity>
+
+            <!-- Dash -->
+            <a-box position="0 0.3 -0.1" width="0.1" height="0.03" depth="0.03" color="#FFFFFF" material="shader: flat; side: double"></a-box>
+
+            <!-- Real Madrid Score -->
+            <a-entity id="realmadrid-score-3d" position="0.5 0.25 -0.1"></a-entity>
+
+        </a-entity>
 
         <a-light type="ambient" intensity="1.5"></a-light>
         <a-light type="directional" intensity="1" position="1 2 1"></a-light>
@@ -322,22 +358,53 @@
         }
 
         function placeARPrediction() {
-            console.log('🎯 Placing AR prediction...');
+            console.log('🎯 Placing AR prediction in world space...');
 
+            const camera = document.getElementById('camera');
             const arContent = document.getElementById('ar-content');
             const barcelonaContainer = document.getElementById('barcelona-score-3d');
             const realmadridContainer = document.getElementById('realmadrid-score-3d');
             const placeBtn = document.getElementById('place-ar-btn');
+            const reticle = document.getElementById('reticle');
+            const hint = document.getElementById('placement-hint');
 
+            // Get camera position and rotation
+            const cameraPos = camera.object3D.position;
+            const cameraRot = camera.object3D.rotation;
+
+            // Calculate placement position 2 meters in front of camera
+            const distance = 2;
+            const direction = new THREE.Vector3(0, 0, -1);
+            direction.applyQuaternion(camera.object3D.quaternion);
+
+            const placePos = new THREE.Vector3(
+                cameraPos.x + direction.x * distance,
+                cameraPos.y + direction.y * distance - 0.5, // Slightly below eye level
+                cameraPos.z + direction.z * distance
+            );
+
+            // Position AR content in world space
+            arContent.object3D.position.copy(placePos);
+
+            // Make content face the camera
+            arContent.object3D.lookAt(cameraPos);
+            arContent.object3D.rotation.x = 0; // Keep upright
+
+            // Show AR content
             arContent.setAttribute('visible', 'true');
 
+            // Create 3D numbers
             createNumber(scores.barcelona, barcelonaContainer, '#FFFFFF');
             createNumber(scores.realmadrid, realmadridContainer, '#FFFFFF');
 
+            // Hide UI elements
             placeBtn.classList.add('hidden');
+            hint.classList.add('hidden');
+            reticle.setAttribute('visible', 'false');
+
             arPlaced = true;
 
-            console.log('🎉 AR prediction placed!');
+            console.log('🎉 AR prediction placed in real world at:', placePos);
         }
 
         function adjustScore(team, delta) {
