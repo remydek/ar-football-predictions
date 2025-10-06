@@ -188,21 +188,6 @@
         .a-enter-vr-button {
             display: none !important;
         }
-
-        /* Camera permission message */
-        .camera-msg {
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background: rgba(0, 0, 0, 0.9);
-            color: white;
-            padding: 30px;
-            border-radius: 16px;
-            text-align: center;
-            z-index: 2000;
-            max-width: 300px;
-        }
     </style>
 </head>
 <body>
@@ -217,121 +202,169 @@
     <!-- AR Scene -->
     <a-scene
         embedded
-        arjs="sourceType: webcam; debugUIEnabled: false; detectionMode: mono_and_matrix; matrixCodeType: 3x3;"
+        arjs="sourceType: webcam; debugUIEnabled: false;"
         vr-mode-ui="enabled: false"
         renderer="logarithmicDepthBuffer: true; precision: medium; antialias: true;"
         device-orientation-permission-ui="enabled: false">
 
         <!-- Camera -->
-        <a-camera gps-camera rotation-reader look-controls-enabled="false"></a-camera>
+        <a-entity camera look-controls="enabled: false">
 
-        <!-- Main AR Content Container (1.5m in front of camera) -->
-        <a-entity id="ar-content" position="0 0 -1.5">
+            <!-- Main AR Content Container - Fixed in front of camera -->
+            <a-entity id="ar-content" position="0 0 -2">
 
-            <!-- Floating animation for entire scene -->
-            <a-animation
-                attribute="position"
-                from="0 0 -1.5"
-                to="0 0.1 -1.5"
-                direction="alternate"
-                dur="2000"
-                repeat="indefinite"
-                easing="ease-in-out-sine">
-            </a-animation>
-
-            <!-- Barcelona Logo with 3D Depth -->
-            <a-entity id="barcelona-logo" position="-0.4 0.3 0">
-                <!-- Depth box behind logo -->
-                <a-box
-                    position="0 0 -0.02"
-                    width="0.3"
-                    height="0.3"
-                    depth="0.04"
-                    color="#A50044"
-                    opacity="0.8">
-                </a-box>
-                <!-- Logo image -->
-                <a-image
-                    src="assets/barcelona.png"
-                    width="0.28"
-                    height="0.28"
-                    position="0 0 0.01"
-                    transparent="true">
-                </a-image>
-                <!-- Rotation animation -->
+                <!-- Floating animation for entire scene -->
                 <a-animation
-                    attribute="rotation"
-                    from="0 0 0"
-                    to="0 360 0"
-                    dur="8000"
+                    attribute="position"
+                    from="0 0 -2"
+                    to="0 0.15 -2"
+                    direction="alternate"
+                    dur="2000"
                     repeat="indefinite"
-                    easing="linear">
+                    easing="ease-in-out-sine">
                 </a-animation>
+
+                <!-- Barcelona Logo with 3D Depth -->
+                <a-entity id="barcelona-logo" position="-0.6 0.4 0">
+                    <!-- Depth box behind logo -->
+                    <a-box
+                        position="0 0 -0.03"
+                        width="0.4"
+                        height="0.4"
+                        depth="0.06"
+                        color="#A50044"
+                        opacity="0.9"
+                        shadow="cast: true">
+                    </a-box>
+                    <!-- Logo image -->
+                    <a-image
+                        src="assets/barcelona.png"
+                        width="0.38"
+                        height="0.38"
+                        position="0 0 0.02"
+                        transparent="true"
+                        shader="flat">
+                    </a-image>
+                    <!-- Rotation animation -->
+                    <a-animation
+                        attribute="rotation"
+                        from="0 0 0"
+                        to="0 360 0"
+                        dur="10000"
+                        repeat="indefinite"
+                        easing="linear">
+                    </a-animation>
+                </a-entity>
+
+                <!-- Real Madrid Logo with 3D Depth -->
+                <a-entity id="realmadrid-logo" position="0.6 0.4 0">
+                    <!-- Depth box behind logo -->
+                    <a-box
+                        position="0 0 -0.03"
+                        width="0.4"
+                        height="0.4"
+                        depth="0.06"
+                        color="#00529F"
+                        opacity="0.9"
+                        shadow="cast: true">
+                    </a-box>
+                    <!-- Logo image -->
+                    <a-image
+                        src="assets/realmadrid.png"
+                        width="0.38"
+                        height="0.38"
+                        position="0 0 0.02"
+                        transparent="true"
+                        shader="flat">
+                    </a-image>
+                    <!-- Rotation animation -->
+                    <a-animation
+                        attribute="rotation"
+                        from="0 0 0"
+                        to="0 360 0"
+                        dur="10000"
+                        repeat="indefinite"
+                        easing="linear">
+                    </a-animation>
+                </a-entity>
+
+                <!-- VS Text -->
+                <a-text
+                    value="VS"
+                    position="0 0.4 0.05"
+                    align="center"
+                    color="#FFFFFF"
+                    width="2"
+                    shader="flat"
+                    font="https://cdn.aframe.io/fonts/Roboto-msdf.json">
+                </a-text>
+
+                <!-- Barcelona Score - Large 3D Text -->
+                <a-entity id="barcelona-score-container" position="-0.6 -0.1 0">
+                    <!-- 3D Text with depth -->
+                    <a-text
+                        id="barcelona-score-ar"
+                        value="0"
+                        align="center"
+                        color="#FFFFFF"
+                        width="3"
+                        shader="flat"
+                        font="https://cdn.aframe.io/fonts/Roboto-msdf.json"
+                        position="0 0 0.05">
+                    </a-text>
+                    <!-- Shadow/depth box behind score -->
+                    <a-box
+                        width="0.5"
+                        height="0.6"
+                        depth="0.08"
+                        color="#A50044"
+                        opacity="0.6"
+                        position="0 0 -0.02">
+                    </a-box>
+                </a-entity>
+
+                <!-- Real Madrid Score - Large 3D Text -->
+                <a-entity id="realmadrid-score-container" position="0.6 -0.1 0">
+                    <!-- 3D Text with depth -->
+                    <a-text
+                        id="realmadrid-score-ar"
+                        value="0"
+                        align="center"
+                        color="#FFFFFF"
+                        width="3"
+                        shader="flat"
+                        font="https://cdn.aframe.io/fonts/Roboto-msdf.json"
+                        position="0 0 0.05">
+                    </a-text>
+                    <!-- Shadow/depth box behind score -->
+                    <a-box
+                        width="0.5"
+                        height="0.6"
+                        depth="0.08"
+                        color="#00529F"
+                        opacity="0.6"
+                        position="0 0 -0.02">
+                    </a-box>
+                </a-entity>
+
+                <!-- Dash between scores -->
+                <a-text
+                    value="-"
+                    position="0 -0.1 0.05"
+                    align="center"
+                    color="#FFFFFF"
+                    width="1.5"
+                    shader="flat"
+                    font="https://cdn.aframe.io/fonts/Roboto-msdf.json">
+                </a-text>
+
             </a-entity>
-
-            <!-- Real Madrid Logo with 3D Depth -->
-            <a-entity id="realmadrid-logo" position="0.4 0.3 0">
-                <!-- Depth box behind logo -->
-                <a-box
-                    position="0 0 -0.02"
-                    width="0.3"
-                    height="0.3"
-                    depth="0.04"
-                    color="#00529F"
-                    opacity="0.8">
-                </a-box>
-                <!-- Logo image -->
-                <a-image
-                    src="assets/realmadrid.png"
-                    width="0.28"
-                    height="0.28"
-                    position="0 0 0.01"
-                    transparent="true">
-                </a-image>
-                <!-- Rotation animation -->
-                <a-animation
-                    attribute="rotation"
-                    from="0 0 0"
-                    to="0 360 0"
-                    dur="8000"
-                    repeat="indefinite"
-                    easing="linear">
-                </a-animation>
-            </a-entity>
-
-            <!-- VS Text -->
-            <a-text
-                value="VS"
-                position="0 0.3 0"
-                align="center"
-                color="white"
-                width="0.8"
-                font="https://cdn.aframe.io/fonts/Roboto-msdf.json">
-            </a-text>
-
-            <!-- Barcelona Score -->
-            <a-text
-                id="barcelona-score-ar"
-                value="0"
-                position="-0.4 0 0"
-                align="center"
-                color="white"
-                width="1.5"
-                font="https://cdn.aframe.io/fonts/Roboto-msdf.json">
-            </a-text>
-
-            <!-- Real Madrid Score -->
-            <a-text
-                id="realmadrid-score-ar"
-                value="0"
-                position="0.4 0 0"
-                align="center"
-                color="white"
-                width="1.5"
-                font="https://cdn.aframe.io/fonts/Roboto-msdf.json">
-            </a-text>
 
         </a-entity>
+
+        <!-- Ambient lighting -->
+        <a-light type="ambient" intensity="0.8"></a-light>
+        <a-light type="directional" intensity="0.5" position="1 1 1"></a-light>
 
     </a-scene>
 
