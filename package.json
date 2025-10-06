@@ -1,0 +1,21 @@
+{
+  "name": "ar-football-predictions",
+  "version": "1.0.0",
+  "description": "Web-based AR football prediction app using AR.js and A-Frame",
+  "scripts": {
+    "start": "python3 -m http.server 8080 || python -m SimpleHTTPServer 8080",
+    "dev": "python3 -m http.server 8080",
+    "deploy": "vercel --prod"
+  },
+  "keywords": [
+    "ar",
+    "augmented-reality",
+    "football",
+    "predictions",
+    "arjs",
+    "aframe",
+    "webxr"
+  ],
+  "author": "Augmento",
+  "license": "MIT"
+}

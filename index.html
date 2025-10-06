@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <title>AR Football Predictions</title>
+
+    <!-- A-Frame and AR.js libraries -->
+    <script src="https://aframe.io/releases/1.4.2/aframe.min.js"></script>
+    <script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar.js"></script>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            overflow: hidden;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+        }
+
+        /* Watermark */
+        .watermark {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            color: white;
+            font-size: 14px;
+            font-weight: 600;
+            z-index: 1000;
+            background: rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            padding: 8px 16px;
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        /* Controls container */
+        .controls {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 20px;
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            align-items: center;
+        }
+
+        /* Score controls row */
+        .score-controls {
+            display: flex;
+            gap: 20px;
+            width: 100%;
+            max-width: 500px;
+            justify-content: space-between;
+        }
+
+        /* Individual team control */
+        .team-control {
+            flex: 1;
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-radius: 16px;
+            padding: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .team-control.barcelona {
+            border-top: 3px solid #A50044;
+        }
+
+        .team-control.realmadrid {
+            border-top: 3px solid #00529F;
+        }
+
+        .team-name {
+            color: white;
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .score-display {
+            color: white;
+            font-size: 32px;
+            font-weight: 700;
+            min-width: 50px;
+            text-align: center;
+        }
+
+        .score-buttons {
+            display: flex;
+            gap: 10px;
+        }
+
+        .score-btn {
+            width: 50px;
+            height: 50px;
+            border-radius: 12px;
+            border: none;
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            color: white;
+            font-size: 24px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .score-btn:active {
+            transform: scale(0.95);
+            background: rgba(255, 255, 255, 0.25);
+        }
+
+        .barcelona .score-btn {
+            background: rgba(165, 0, 68, 0.4);
+        }
+
+        .barcelona .score-btn:active {
+            background: rgba(165, 0, 68, 0.6);
+        }
+
+        .realmadrid .score-btn {
+            background: rgba(0, 82, 159, 0.4);
+        }
+
+        .realmadrid .score-btn:active {
+            background: rgba(0, 82, 159, 0.6);
+        }
+
+        /* Save button */
+        .save-btn {
+            width: 100%;
+            max-width: 300px;
+            padding: 16px 32px;
+            background: linear-gradient(135deg, rgba(165, 0, 68, 0.8), rgba(0, 82, 159, 0.8));
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            border-radius: 16px;
+            color: white;
+            font-size: 16px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .save-btn:active {
+            transform: scale(0.98);
+            box-shadow: 0 0 30px rgba(255, 255, 255, 0.3);
+        }
+
+        /* Loading message */
+        .loading {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: white;
+            font-size: 18px;
+            font-weight: 600;
+            z-index: 999;
+            background: rgba(0, 0, 0, 0.7);
+            padding: 20px 40px;
+            border-radius: 16px;
+            text-align: center;
+        }
+
+        /* Hide A-Frame UI */
+        .a-enter-vr-button {
+            display: none !important;
+        }
+
+        /* Camera permission message */
+        .camera-msg {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(0, 0, 0, 0.9);
+            color: white;
+            padding: 30px;
+            border-radius: 16px;
+            text-align: center;
+            z-index: 2000;
+            max-width: 300px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Watermark -->
+    <div class="watermark">✨ by Augmento</div>
+
+    <!-- Loading message -->
+    <div class="loading" id="loading">
+        Point your camera at any surface...
+    </div>
+
+    <!-- AR Scene -->
+    <a-scene
+        embedded
+        arjs="sourceType: webcam; debugUIEnabled: false; detectionMode: mono_and_matrix; matrixCodeType: 3x3;"
+        vr-mode-ui="enabled: false"
+        renderer="logarithmicDepthBuffer: true; precision: medium; antialias: true;"
+        device-orientation-permission-ui="enabled: false">
+
+        <!-- Camera -->
+        <a-camera gps-camera rotation-reader look-controls-enabled="false"></a-camera>
+
+        <!-- Main AR Content Container (1.5m in front of camera) -->
+        <a-entity id="ar-content" position="0 0 -1.5">
+
+            <!-- Floating animation for entire scene -->
+            <a-animation
+                attribute="position"
+                from="0 0 -1.5"
+                to="0 0.1 -1.5"
+                direction="alternate"
+                dur="2000"
+                repeat="indefinite"
+                easing="ease-in-out-sine">
+            </a-animation>
+
+            <!-- Barcelona Logo with 3D Depth -->
+            <a-entity id="barcelona-logo" position="-0.4 0.3 0">
+                <!-- Depth box behind logo -->
+                <a-box
+                    position="0 0 -0.02"
+                    width="0.3"
+                    height="0.3"
+                    depth="0.04"
+                    color="#A50044"
+                    opacity="0.8">
+                </a-box>
+                <!-- Logo image -->
+                <a-image
+                    src="assets/barcelona.png"
+                    width="0.28"
+                    height="0.28"
+                    position="0 0 0.01"
+                    transparent="true">
+                </a-image>
+                <!-- Rotation animation -->
+                <a-animation
+                    attribute="rotation"
+                    from="0 0 0"
+                    to="0 360 0"
+                    dur="8000"
+                    repeat="indefinite"
+                    easing="linear">
+                </a-animation>
+            </a-entity>
+
+            <!-- Real Madrid Logo with 3D Depth -->
+            <a-entity id="realmadrid-logo" position="0.4 0.3 0">
+                <!-- Depth box behind logo -->
+                <a-box
+                    position="0 0 -0.02"
+                    width="0.3"
+                    height="0.3"
+                    depth="0.04"
+                    color="#00529F"
+                    opacity="0.8">
+                </a-box>
+                <!-- Logo image -->
+                <a-image
+                    src="assets/realmadrid.png"
+                    width="0.28"
+                    height="0.28"
+                    position="0 0 0.01"
+                    transparent="true">
+                </a-image>
+                <!-- Rotation animation -->
+                <a-animation
+                    attribute="rotation"
+                    from="0 0 0"
+                    to="0 360 0"
+                    dur="8000"
+                    repeat="indefinite"
+                    easing="linear">
+                </a-animation>
+            </a-entity>
+
+            <!-- VS Text -->
+            <a-text
+                value="VS"
+                position="0 0.3 0"
+                align="center"
+                color="white"
+                width="0.8"
+                font="https://cdn.aframe.io/fonts/Roboto-msdf.json">
+            </a-text>
+
+            <!-- Barcelona Score -->
+            <a-text
+                id="barcelona-score-ar"
+                value="0"
+                position="-0.4 0 0"
+                align="center"
+                color="white"
+                width="1.5"
+                font="https://cdn.aframe.io/fonts/Roboto-msdf.json">
+            </a-text>
+
+            <!-- Real Madrid Score -->
+            <a-text
+                id="realmadrid-score-ar"
+                value="0"
+                position="0.4 0 0"
+                align="center"
+                color="white"
+                width="1.5"
+                font="https://cdn.aframe.io/fonts/Roboto-msdf.json">
+            </a-text>
+
+        </a-entity>
+
+    </a-scene>
+
+    <!-- UI Controls Overlay -->
+    <div class="controls">
+        <!-- Score Controls -->
+        <div class="score-controls">
+            <!-- Barcelona Control -->
+            <div class="team-control barcelona">
+                <div class="team-name">Barcelona</div>
+                <div class="score-display" id="barcelona-score-ui">0</div>
+                <div class="score-buttons">
+                    <button class="score-btn" onclick="adjustScore('barcelona', -1)">−</button>
+                    <button class="score-btn" onclick="adjustScore('barcelona', 1)">+</button>
+                </div>
+            </div>
+
+            <!-- Real Madrid Control -->
+            <div class="team-control realmadrid">
+                <div class="team-name">Real Madrid</div>
+                <div class="score-display" id="realmadrid-score-ui">0</div>
+                <div class="score-buttons">
+                    <button class="score-btn" onclick="adjustScore('realmadrid', -1)">−</button>
+                    <button class="score-btn" onclick="adjustScore('realmadrid', 1)">+</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Save Button -->
+        <button class="save-btn" onclick="savePrediction()">
+            📸 Save Prediction
+        </button>
+    </div>
+
+    <script>
+        // Score state
+        let scores = {
+            barcelona: 0,
+            realmadrid: 0
+        };
+
+        // Adjust score function
+        function adjustScore(team, delta) {
+            // Update score (keep between 0-9)
+            scores[team] = Math.max(0, Math.min(9, scores[team] + delta));
+
+            // Update UI display
+            document.getElementById(`${team}-score-ui`).textContent = scores[team];
+
+            // Update AR 3D text
+            const arScoreElement = document.getElementById(`${team}-score-ar`);
+            if (arScoreElement) {
+                arScoreElement.setAttribute('value', scores[team].toString());
+            }
+        }
+
+        // Save prediction (screenshot)
+        function savePrediction() {
+            // Hide controls temporarily
+            const controls = document.querySelector('.controls');
+            const watermark = document.querySelector('.watermark');
+            const loading = document.getElementById('loading');
+
+            controls.style.display = 'none';
+            if (loading) loading.style.display = 'none';
+
+            // Wait a moment for UI to hide
+            setTimeout(() => {
+                // Get the canvas element from the A-Frame scene
+                const scene = document.querySelector('a-scene');
+                const canvas = scene.canvas || scene.querySelector('canvas');
+
+                if (canvas) {
+                    // Convert canvas to blob and download
+                    canvas.toBlob((blob) => {
+                        if (blob) {
+                            const url = URL.createObjectURL(blob);
+                            const link = document.createElement('a');
+                            link.href = url;
+                            link.download = `prediction-barcelona-${scores.barcelona}-${scores.realmadrid}-realmadrid.png`;
+                            document.body.appendChild(link);
+                            link.click();
+                            document.body.removeChild(link);
+                            URL.revokeObjectURL(url);
+                        }
+
+                        // Show controls again
+                        controls.style.display = 'flex';
+                    }, 'image/png');
+                } else {
+                    // Fallback: show controls again if canvas not found
+                    console.error('Canvas not found for screenshot');
+                    controls.style.display = 'flex';
+                }
+            }, 100);
+        }
+
+        // Hide loading message after scene is loaded
+        document.querySelector('a-scene').addEventListener('loaded', () => {
+            setTimeout(() => {
+                const loading = document.getElementById('loading');
+                if (loading) {
+                    loading.style.display = 'none';
+                }
+            }, 2000);
+        });
+
+        // Prevent default touch behaviors for better mobile experience
+        document.addEventListener('touchmove', function(e) {
+            if (e.target.tagName !== 'BUTTON') {
+                e.preventDefault();
+            }
+        }, { passive: false });
+
+        // Log AR.js status
+        console.log('AR Football Predictions App Loaded');
+        console.log('Make sure to access via HTTPS for camera permissions');
+    </script>
+</body>
+</html>

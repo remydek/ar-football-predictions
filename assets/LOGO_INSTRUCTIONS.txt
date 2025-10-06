@@ -1,0 +1,19 @@
+REQUIRED LOGO FILES
+===================
+
+Please add the following PNG files to this assets/ folder:
+
+1. barcelona.png
+   - Barcelona FC logo
+   - Transparent background (PNG)
+   - Recommended size: 512x512px or larger
+   - High quality for AR display
+
+2. realmadrid.png
+   - Real Madrid FC logo
+   - Transparent background (PNG)
+   - Recommended size: 512x512px or larger
+   - High quality for AR display
+
+These logos will be displayed in AR with 3D depth effects.
+The app will automatically load them from assets/barcelona.png and assets/realmadrid.png
