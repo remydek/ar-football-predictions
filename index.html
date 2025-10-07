@@ -4,10 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta name="apple-mobile-web-app-capable" content="yes">
-    <title>AR Football Predictions</title>
-
-    <script src="https://aframe.io/releases/1.4.2/aframe.min.js"></script>
-    <script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar.js"></script>
+    <title>Match Predictions</title>
 
     <style>
         * {
@@ -17,42 +14,309 @@
         }
 
         body {
-            margin: 0;
-            overflow: hidden;
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            overflow-x: hidden;
+            background: #f5f5f5;
         }
 
-        /* Score Selection Page */
-        #score-page {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
-            background: linear-gradient(135deg, #4A148C 0%, #1A237E 50%, #B71C1C 100%);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            z-index: 2000;
-        }
-
-        #score-page.hidden {
+        /* Common Styles */
+        .screen {
             display: none;
+            min-height: 100vh;
+            padding: 20px;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .screen.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
         .header {
             display: flex;
             align-items: center;
-            gap: 40px;
-            margin-bottom: 40px;
+            margin-bottom: 30px;
+            gap: 15px;
         }
 
-        .header img {
+        .back-btn {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: rgba(0, 0, 0, 0.1);
+            border: none;
+            font-size: 20px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .back-btn:active {
+            transform: scale(0.95);
+        }
+
+        .header-title {
+            font-size: 24px;
+            font-weight: 800;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: #666;
+        }
+
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #4A148C;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Screen 1: Home */
+        #home-screen {
+            background: linear-gradient(135deg, #4A148C 0%, #1A237E 50%, #B71C1C 100%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            color: white;
+        }
+
+        .home-logo {
+            font-size: 48px;
+            margin-bottom: 20px;
+        }
+
+        .home-title {
+            font-size: 32px;
+            font-weight: 900;
+            margin-bottom: 10px;
+        }
+
+        .home-subtitle {
+            font-size: 16px;
+            margin-bottom: 50px;
+            opacity: 0.9;
+        }
+
+        .sports-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 20px;
+            width: 100%;
+            max-width: 400px;
+        }
+
+        .sport-card {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            cursor: pointer;
+            transition: transform 0.2s;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .sport-card:active {
+            transform: scale(0.98);
+        }
+
+        .sport-icon {
+            font-size: 48px;
+            margin-bottom: 15px;
+        }
+
+        .sport-name {
+            font-size: 24px;
+            font-weight: 800;
+            color: #333;
+            margin-bottom: 5px;
+        }
+
+        .sport-subtitle {
+            font-size: 14px;
+            color: #666;
+        }
+
+        /* Screen 2: Leagues */
+        #leagues-screen {
+            background: #f5f5f5;
+        }
+
+        .leagues-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 15px;
+        }
+
+        .league-card {
+            background: white;
+            border-radius: 16px;
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            cursor: pointer;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            transition: transform 0.2s;
+        }
+
+        .league-card:active {
+            transform: scale(0.98);
+        }
+
+        .league-icon {
+            width: 60px;
             height: 60px;
+            background: linear-gradient(135deg, #4A148C, #B71C1C);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            flex-shrink: 0;
         }
 
-        .card {
+        .league-info {
+            flex: 1;
+        }
+
+        .league-name {
+            font-size: 18px;
+            font-weight: 700;
+            color: #333;
+            margin-bottom: 5px;
+        }
+
+        .league-country {
+            font-size: 14px;
+            color: #666;
+        }
+
+        /* Screen 3: Matches */
+        #matches-screen {
+            background: #f5f5f5;
+        }
+
+        .matches-list {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .match-card {
+            background: white;
+            border-radius: 16px;
+            padding: 20px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .match-date {
+            font-size: 12px;
+            color: #666;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 15px;
+        }
+
+        .match-teams {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+
+        .match-team {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .team-badge {
+            width: 60px;
+            height: 60px;
+            background: #f0f0f0;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+        }
+
+        .team-badge img {
+            width: 50px;
+            height: 50px;
+            object-fit: contain;
+        }
+
+        .team-name {
+            font-size: 14px;
+            font-weight: 700;
+            text-align: center;
+            color: #333;
+        }
+
+        .match-vs {
+            font-size: 16px;
+            font-weight: 900;
+            color: #999;
+            padding: 0 15px;
+        }
+
+        .predict-btn {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, #4A148C, #B71C1C);
+            border: none;
+            border-radius: 12px;
+            color: white;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            text-transform: uppercase;
+        }
+
+        .predict-btn:active {
+            transform: scale(0.98);
+        }
+
+        .no-matches {
+            text-align: center;
+            padding: 60px 20px;
+            color: #999;
+        }
+
+        .no-matches-icon {
+            font-size: 64px;
+            margin-bottom: 20px;
+        }
+
+        /* Screen 4: Prediction */
+        #prediction-screen {
+            background: linear-gradient(135deg, #4A148C 0%, #1A237E 50%, #B71C1C 100%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .prediction-card {
             background: white;
             border-radius: 24px;
             padding: 40px 30px;
@@ -101,14 +365,6 @@
             background: #f1f8f4;
         }
 
-        .team-box.barcelona {
-            border-top: 4px solid #A50044;
-        }
-
-        .team-box.realmadrid {
-            border-top: 4px solid #00529F;
-        }
-
         .team-logo {
             width: 80px;
             height: 80px;
@@ -122,6 +378,7 @@
         .team-logo img {
             width: 70px;
             height: 70px;
+            object-fit: contain;
         }
 
         .vs-text {
@@ -131,12 +388,13 @@
             align-self: center;
         }
 
-        .team-name {
+        .prediction-team-name {
             font-size: 12px;
             font-weight: 700;
             text-transform: uppercase;
             letter-spacing: 1px;
             color: #333;
+            text-align: center;
         }
 
         .score-input {
@@ -152,7 +410,7 @@
             gap: 10px;
         }
 
-        .score-btn-page {
+        .score-btn {
             width: 45px;
             height: 45px;
             border-radius: 12px;
@@ -165,12 +423,23 @@
             transition: all 0.2s;
         }
 
-        .score-btn-page:active {
+        .score-btn:active {
             transform: scale(0.95);
             background: #e0e0e0;
         }
 
-        .view-ar-btn {
+        .winner-badge {
+            background: #4CAF50;
+            color: white;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 10px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .share-btn {
             width: 100%;
             padding: 18px;
             background: #000;
@@ -187,375 +456,329 @@
             gap: 10px;
         }
 
-        .view-ar-btn:active {
+        .share-btn:active {
             transform: scale(0.98);
-        }
-
-        .winner-badge {
-            background: #4CAF50;
-            color: white;
-            padding: 4px 12px;
-            border-radius: 12px;
-            font-size: 10px;
-            font-weight: 800;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
-        /* AR View Page */
-        #ar-page {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
-            display: none;
-            z-index: 1000;
-        }
-
-        #ar-page.active {
-            display: block;
-        }
-
-        .back-btn {
-            position: fixed;
-            top: 20px;
-            left: 20px;
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            background: rgba(0, 0, 0, 0.6);
-            backdrop-filter: blur(10px);
-            border: none;
-            color: white;
-            font-size: 24px;
-            cursor: pointer;
-            z-index: 1001;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .place-btn {
-            position: fixed;
-            bottom: 40px;
-            left: 50%;
-            transform: translateX(-50%);
-            z-index: 1001;
-            padding: 20px 50px;
-            background: rgba(0, 0, 0, 0.8);
-            backdrop-filter: blur(10px);
-            border: 2px solid white;
-            border-radius: 50px;
-            color: white;
-            font-size: 18px;
-            font-weight: 700;
-            text-transform: uppercase;
-            cursor: pointer;
-        }
-
-        .place-btn.hidden {
-            display: none;
-        }
-
-        .place-btn:active {
-            transform: translateX(-50%) scale(0.95);
-        }
-
-        .a-enter-vr-button {
-            display: none !important;
         }
     </style>
 </head>
 <body>
-    <!-- Score Selection Page -->
-    <div id="score-page">
+    <!-- Screen 1: Home -->
+    <div id="home-screen" class="screen active">
+        <div class="home-logo">⚽</div>
+        <h1 class="home-title">Match Predictions</h1>
+        <p class="home-subtitle">Pick your sport and make your predictions</p>
+
+        <div class="sports-grid">
+            <div class="sport-card" onclick="navigateTo('leagues')">
+                <div class="sport-icon">⚽</div>
+                <div class="sport-name">Football</div>
+                <div class="sport-subtitle">View leagues & matches</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Screen 2: Leagues -->
+    <div id="leagues-screen" class="screen">
         <div class="header">
-            <svg width="120" height="40" viewBox="0 0 120 40" fill="white">
-                <text x="10" y="30" font-size="24" font-weight="bold">augmento</text>
-            </svg>
-            <svg width="120" height="40" viewBox="0 0 120 40" fill="white">
-                <text x="10" y="30" font-size="20" font-weight="bold">SIDEMEN</text>
-            </svg>
+            <button class="back-btn" onclick="navigateTo('home')">←</button>
+            <h2 class="header-title">Football Leagues</h2>
         </div>
 
-        <div class="card">
-            <div class="card-title">Pick a winner!</div>
-            <div class="card-subtitle">Share your predictions and WIN!</div>
+        <div id="leagues-loading" class="loading">
+            <div class="spinner"></div>
+            <p>Loading leagues...</p>
+        </div>
+
+        <div id="leagues-grid" class="leagues-grid"></div>
+    </div>
+
+    <!-- Screen 3: Matches -->
+    <div id="matches-screen" class="screen">
+        <div class="header">
+            <button class="back-btn" onclick="navigateTo('leagues')">←</button>
+            <h2 class="header-title" id="matches-title">Upcoming Matches</h2>
+        </div>
+
+        <div id="matches-loading" class="loading">
+            <div class="spinner"></div>
+            <p>Loading matches...</p>
+        </div>
+
+        <div id="matches-list" class="matches-list"></div>
+
+        <div id="no-matches" class="no-matches" style="display: none;">
+            <div class="no-matches-icon">📅</div>
+            <h3>No Upcoming Matches</h3>
+            <p>Check back later for new fixtures</p>
+        </div>
+    </div>
+
+    <!-- Screen 4: Prediction -->
+    <div id="prediction-screen" class="screen">
+        <div class="header" style="position: absolute; top: 20px; left: 20px; z-index: 10;">
+            <button class="back-btn" onclick="navigateTo('matches')" style="background: rgba(255, 255, 255, 0.3); color: white;">←</button>
+        </div>
+
+        <div class="prediction-card">
+            <div class="card-title">Make Your Prediction!</div>
+            <div class="card-subtitle">Share your score and WIN!</div>
 
             <div class="teams-container">
-                <div class="team-box barcelona" id="team-barcelona">
+                <div class="team-box" id="prediction-team-home">
                     <div class="team-logo">
-                        <img src="assets/barcelona.png" alt="Barcelona" onerror="this.style.display='none'">
+                        <img id="pred-home-logo" src="" alt="" onerror="this.style.display='none'">
                     </div>
-                    <div class="team-name">Barcelona</div>
-                    <div class="score-input" id="score-barcelona">4</div>
+                    <div class="prediction-team-name" id="pred-home-name">Team 1</div>
+                    <div class="score-input" id="score-home">0</div>
                     <div class="score-controls">
-                        <button class="score-btn-page" onclick="adjustScorePage('barcelona', -1)">−</button>
-                        <button class="score-btn-page" onclick="adjustScorePage('barcelona', 1)">+</button>
+                        <button class="score-btn" onclick="adjustScore('home', -1)">−</button>
+                        <button class="score-btn" onclick="adjustScore('home', 1)">+</button>
                     </div>
-                    <div class="winner-badge" id="winner-barcelona">WINNER!</div>
+                    <div class="winner-badge" id="winner-home" style="visibility: hidden;">WINNER!</div>
                 </div>
 
                 <div class="vs-text">VS</div>
 
-                <div class="team-box realmadrid" id="team-realmadrid">
+                <div class="team-box" id="prediction-team-away">
                     <div class="team-logo">
-                        <img src="assets/realmadrid.png" alt="Real Madrid" onerror="this.style.display='none'">
+                        <img id="pred-away-logo" src="" alt="" onerror="this.style.display='none'">
                     </div>
-                    <div class="team-name">Real Madrid</div>
-                    <div class="score-input" id="score-realmadrid">2</div>
+                    <div class="prediction-team-name" id="pred-away-name">Team 2</div>
+                    <div class="score-input" id="score-away">0</div>
                     <div class="score-controls">
-                        <button class="score-btn-page" onclick="adjustScorePage('realmadrid', -1)">−</button>
-                        <button class="score-btn-page" onclick="adjustScorePage('realmadrid', 1)">+</button>
+                        <button class="score-btn" onclick="adjustScore('away', -1)">−</button>
+                        <button class="score-btn" onclick="adjustScore('away', 1)">+</button>
                     </div>
-                    <div class="winner-badge" id="winner-realmadrid" style="visibility: hidden;">WINNER!</div>
+                    <div class="winner-badge" id="winner-away" style="visibility: hidden;">WINNER!</div>
                 </div>
             </div>
 
-            <button class="view-ar-btn" onclick="openARView()">
-                📷 VIEW SCORE IN AR
+            <button class="share-btn" onclick="sharePrediction()">
+                📤 SHARE PREDICTION
             </button>
         </div>
     </div>
 
-    <!-- AR Camera View Page -->
-    <div id="ar-page">
-        <button class="back-btn" onclick="closeARView()">←</button>
-        <button class="place-btn" id="place-btn" onclick="placeARContent()">🎯 TAP TO PLACE</button>
-
-        <a-scene
-            id="ar-scene"
-            embedded
-            arjs="sourceType: webcam; debugUIEnabled: false;"
-            vr-mode-ui="enabled: false"
-            renderer="logarithmicDepthBuffer: true; precision: medium; antialias: true;">
-
-            <a-camera id="camera" position="0 0 0">
-                <a-ring
-                    id="reticle"
-                    position="0 0 -0.5"
-                    radius-inner="0.01"
-                    radius-outer="0.015"
-                    color="#00FF00"
-                    opacity="0.8"
-                    material="shader: flat">
-                </a-ring>
-            </a-camera>
-
-            <!-- AR Content in world space -->
-            <a-entity id="ar-content" visible="false">
-
-                <!-- Platform -->
-                <a-circle
-                    position="0 0.01 0"
-                    radius="1.5"
-                    rotation="-90 0 0"
-                    color="#333333"
-                    opacity="0.5"
-                    material="shader: flat; side: double">
-                </a-circle>
-
-                <!-- Barcelona Side -->
-                <a-entity position="-0.8 0.1 0">
-                    <!-- Logo -->
-                    <a-cylinder position="0 0.6 0" radius="0.2" height="0.05" color="#A50044"></a-cylinder>
-                    <a-box position="0 0.7 0" width="0.35" height="0.35" depth="0.05" color="#A50044"></a-box>
-                    <a-image src="assets/barcelona.png" width="0.33" height="0.33" position="0 0.7 0.03" transparent="true"></a-image>
-                    <a-animation attribute="rotation" from="0 0 0" to="0 360 0" dur="8000" repeat="indefinite" easing="linear"></a-animation>
-                </a-entity>
-
-                <!-- Barcelona 3D Score -->
-                <a-entity id="barcelona-score-3d" position="-0.8 0 0"></a-entity>
-
-                <!-- Real Madrid Side -->
-                <a-entity position="0.8 0.1 0">
-                    <!-- Logo -->
-                    <a-cylinder position="0 0.6 0" radius="0.2" height="0.05" color="#00529F"></a-cylinder>
-                    <a-box position="0 0.7 0" width="0.35" height="0.35" depth="0.05" color="#00529F"></a-box>
-                    <a-image src="assets/realmadrid.png" width="0.33" height="0.33" position="0 0.7 0.03" transparent="true"></a-image>
-                    <a-animation attribute="rotation" from="0 0 0" to="0 360 0" dur="8000" repeat="indefinite" easing="linear"></a-animation>
-                </a-entity>
-
-                <!-- Real Madrid 3D Score -->
-                <a-entity id="realmadrid-score-3d" position="0.8 0 0"></a-entity>
-
-                <!-- Dash -->
-                <a-box position="0 0.1 0" width="0.15" height="0.05" depth="0.05" color="#FFFFFF" material="shader: flat"></a-box>
-
-            </a-entity>
-
-            <a-light type="ambient" intensity="1.5"></a-light>
-            <a-light type="directional" intensity="1.2" position="1 2 1"></a-light>
-
-        </a-scene>
-    </div>
-
     <script>
-        let scores = { barcelona: 4, realmadrid: 2 };
-        let arPlaced = false;
+        // App State
+        const state = {
+            currentScreen: 'home',
+            selectedLeague: null,
+            selectedMatch: null,
+            scores: { home: 0, away: 0 },
+            leagues: [],
+            matches: []
+        };
 
-        // Custom 3D Text Component with extrusion
-        AFRAME.registerComponent('extruded-text', {
-            schema: {
-                value: { type: 'string', default: '0' },
-                size: { type: 'number', default: 0.5 },
-                depth: { type: 'number', default: 0.1 },
-                color: { type: 'color', default: '#FFFFFF' }
-            },
-            init: function() {
-                this.createText();
-            },
-            update: function() {
-                this.createText();
-            },
-            createText: function() {
-                const el = this.el;
-                const data = this.data;
+        const API_BASE = 'https://www.thesportsdb.com/api/v1/json/3';
 
-                // Clear previous
-                while (el.firstChild) {
-                    el.removeChild(el.firstChild);
-                }
+        // Popular leagues for MVP
+        const FEATURED_LEAGUES = [
+            { id: '4328', name: 'English Premier League', country: 'England', icon: '🏴󠁧󠁢󠁥󠁮󠁧󠁿' },
+            { id: '4335', name: 'Spanish La Liga', country: 'Spain', icon: '🇪🇸' },
+            { id: '4332', name: 'Italian Serie A', country: 'Italy', icon: '🇮🇹' },
+            { id: '4331', name: 'German Bundesliga', country: 'Germany', icon: '🇩🇪' },
+            { id: '4334', name: 'French Ligue 1', country: 'France', icon: '🇫🇷' },
+            { id: '4480', name: 'UEFA Champions League', country: 'Europe', icon: '🏆' }
+        ];
 
-                // Create layers for depth effect
-                const layers = 10;
-                for (let i = 0; i < layers; i++) {
-                    const text = document.createElement('a-text');
-                    text.setAttribute('value', data.value);
-                    text.setAttribute('align', 'center');
-                    text.setAttribute('color', data.color);
-                    text.setAttribute('width', data.size * 2);
-                    text.setAttribute('position', `0 0 ${i * (data.depth / layers)}`);
-                    text.setAttribute('material', 'shader: flat');
-                    el.appendChild(text);
-                }
+        // Navigation
+        function navigateTo(screen, data = null) {
+            console.log(`Navigating to ${screen}`, data);
 
-                // Front face (brightest)
-                const frontText = document.createElement('a-text');
-                frontText.setAttribute('value', data.value);
-                frontText.setAttribute('align', 'center');
-                frontText.setAttribute('color', '#FFFFFF');
-                frontText.setAttribute('width', data.size * 2);
-                frontText.setAttribute('position', `0 0 ${data.depth}`);
-                frontText.setAttribute('material', 'shader: flat');
-                el.appendChild(frontText);
+            // Hide all screens
+            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+
+            // Show target screen
+            document.getElementById(`${screen}-screen`).classList.add('active');
+            state.currentScreen = screen;
+
+            // Load data based on screen
+            if (screen === 'leagues') {
+                loadLeagues();
+            } else if (screen === 'matches' && data) {
+                state.selectedLeague = data;
+                loadMatches(data.id, data.name);
+            } else if (screen === 'prediction' && data) {
+                state.selectedMatch = data;
+                loadPrediction(data);
             }
-        });
+        }
 
-        function adjustScorePage(team, delta) {
-            scores[team] = Math.max(0, Math.min(99, scores[team] + delta));
-            document.getElementById(`score-${team}`).textContent = scores[team];
+        // Load Leagues
+        async function loadLeagues() {
+            const loading = document.getElementById('leagues-loading');
+            const grid = document.getElementById('leagues-grid');
 
-            // Update winner badge
-            if (scores.barcelona > scores.realmadrid) {
-                document.getElementById('winner-barcelona').style.visibility = 'visible';
-                document.getElementById('winner-realmadrid').style.visibility = 'hidden';
-                document.getElementById('team-barcelona').classList.add('selected');
-                document.getElementById('team-realmadrid').classList.remove('selected');
-            } else if (scores.realmadrid > scores.barcelona) {
-                document.getElementById('winner-barcelona').style.visibility = 'hidden';
-                document.getElementById('winner-realmadrid').style.visibility = 'visible';
-                document.getElementById('team-barcelona').classList.remove('selected');
-                document.getElementById('team-realmadrid').classList.add('selected');
+            loading.style.display = 'block';
+            grid.innerHTML = '';
+
+            // Use featured leagues for MVP
+            setTimeout(() => {
+                loading.style.display = 'none';
+
+                FEATURED_LEAGUES.forEach(league => {
+                    const card = document.createElement('div');
+                    card.className = 'league-card';
+                    card.onclick = () => navigateTo('matches', league);
+                    card.innerHTML = `
+                        <div class="league-icon">${league.icon}</div>
+                        <div class="league-info">
+                            <div class="league-name">${league.name}</div>
+                            <div class="league-country">${league.country}</div>
+                        </div>
+                    `;
+                    grid.appendChild(card);
+                });
+            }, 500);
+        }
+
+        // Load Matches
+        async function loadMatches(leagueId, leagueName) {
+            const loading = document.getElementById('matches-loading');
+            const list = document.getElementById('matches-list');
+            const noMatches = document.getElementById('no-matches');
+            const title = document.getElementById('matches-title');
+
+            title.textContent = leagueName;
+            loading.style.display = 'block';
+            list.innerHTML = '';
+            noMatches.style.display = 'none';
+
+            try {
+                const response = await fetch(`${API_BASE}/eventsnextleague.php?id=${leagueId}`);
+                const data = await response.json();
+
+                loading.style.display = 'none';
+
+                if (!data.events || data.events.length === 0) {
+                    noMatches.style.display = 'block';
+                    return;
+                }
+
+                // Show up to 10 matches
+                const matches = data.events.slice(0, 10);
+
+                matches.forEach(match => {
+                    const card = document.createElement('div');
+                    card.className = 'match-card';
+
+                    const date = new Date(match.dateEvent + 'T' + (match.strTime || '00:00'));
+                    const formattedDate = date.toLocaleDateString('en-US', {
+                        weekday: 'short',
+                        month: 'short',
+                        day: 'numeric',
+                        hour: '2-digit',
+                        minute: '2-digit'
+                    });
+
+                    card.innerHTML = `
+                        <div class="match-date">${formattedDate}</div>
+                        <div class="match-teams">
+                            <div class="match-team">
+                                <div class="team-badge">
+                                    <img src="${match.strHomeTeamBadge || ''}" alt="${match.strHomeTeam}" onerror="this.parentElement.innerHTML='⚽'">
+                                </div>
+                                <div class="team-name">${match.strHomeTeam}</div>
+                            </div>
+                            <div class="match-vs">VS</div>
+                            <div class="match-team">
+                                <div class="team-badge">
+                                    <img src="${match.strAwayTeamBadge || ''}" alt="${match.strAwayTeam}" onerror="this.parentElement.innerHTML='⚽'">
+                                </div>
+                                <div class="team-name">${match.strAwayTeam}</div>
+                            </div>
+                        </div>
+                        <button class="predict-btn" onclick='selectMatch(${JSON.stringify({
+                            homeTeam: match.strHomeTeam,
+                            awayTeam: match.strAwayTeam,
+                            homeBadge: match.strHomeTeamBadge || '',
+                            awayBadge: match.strAwayTeamBadge || '',
+                            date: formattedDate
+                        })})'>Make Prediction</button>
+                    `;
+
+                    list.appendChild(card);
+                });
+
+            } catch (error) {
+                console.error('Error loading matches:', error);
+                loading.style.display = 'none';
+                noMatches.style.display = 'block';
+            }
+        }
+
+        // Select Match
+        function selectMatch(matchData) {
+            navigateTo('prediction', matchData);
+        }
+
+        // Load Prediction Screen
+        function loadPrediction(match) {
+            document.getElementById('pred-home-name').textContent = match.homeTeam;
+            document.getElementById('pred-away-name').textContent = match.awayTeam;
+            document.getElementById('pred-home-logo').src = match.homeBadge;
+            document.getElementById('pred-away-logo').src = match.awayBadge;
+
+            // Reset scores
+            state.scores = { home: 0, away: 0 };
+            document.getElementById('score-home').textContent = '0';
+            document.getElementById('score-away').textContent = '0';
+            updateWinnerBadges();
+        }
+
+        // Adjust Score
+        function adjustScore(team, delta) {
+            state.scores[team] = Math.max(0, Math.min(99, state.scores[team] + delta));
+            document.getElementById(`score-${team}`).textContent = state.scores[team];
+            updateWinnerBadges();
+        }
+
+        // Update Winner Badges
+        function updateWinnerBadges() {
+            const homeBox = document.getElementById('prediction-team-home');
+            const awayBox = document.getElementById('prediction-team-away');
+            const homeBadge = document.getElementById('winner-home');
+            const awayBadge = document.getElementById('winner-away');
+
+            if (state.scores.home > state.scores.away) {
+                homeBadge.style.visibility = 'visible';
+                awayBadge.style.visibility = 'hidden';
+                homeBox.classList.add('selected');
+                awayBox.classList.remove('selected');
+            } else if (state.scores.away > state.scores.home) {
+                homeBadge.style.visibility = 'hidden';
+                awayBadge.style.visibility = 'visible';
+                homeBox.classList.remove('selected');
+                awayBox.classList.add('selected');
             } else {
-                document.getElementById('winner-barcelona').style.visibility = 'hidden';
-                document.getElementById('winner-realmadrid').style.visibility = 'hidden';
-                document.getElementById('team-barcelona').classList.remove('selected');
-                document.getElementById('team-realmadrid').classList.remove('selected');
+                homeBadge.style.visibility = 'hidden';
+                awayBadge.style.visibility = 'hidden';
+                homeBox.classList.remove('selected');
+                awayBox.classList.remove('selected');
             }
         }
 
-        function openARView() {
-            console.log('Opening AR view...');
-            document.getElementById('score-page').classList.add('hidden');
-            document.getElementById('ar-page').classList.add('active');
+        // Share Prediction
+        function sharePrediction() {
+            const match = state.selectedMatch;
+            const text = `My prediction:\n${match.homeTeam} ${state.scores.home} - ${state.scores.away} ${match.awayTeam}`;
 
-            // Initialize AR scene
-            const scene = document.getElementById('ar-scene');
-            if (scene && scene.hasLoaded) {
-                console.log('AR scene ready');
+            if (navigator.share) {
+                navigator.share({
+                    title: 'My Match Prediction',
+                    text: text
+                }).catch(err => console.log('Share cancelled'));
+            } else {
+                // Fallback: Copy to clipboard
+                navigator.clipboard.writeText(text).then(() => {
+                    alert('Prediction copied to clipboard!');
+                });
             }
         }
 
-        function closeARView() {
-            console.log('Closing AR view...');
-            document.getElementById('ar-page').classList.remove('active');
-            document.getElementById('score-page').classList.remove('hidden');
-
-            // Reset placement
-            const arContent = document.getElementById('ar-content');
-            arContent.setAttribute('visible', 'false');
-            document.getElementById('place-btn').classList.remove('hidden');
-            document.getElementById('reticle').setAttribute('visible', 'true');
-            arPlaced = false;
-        }
-
-        function placeARContent() {
-            console.log('Placing AR content in world space...');
-
-            const camera = document.getElementById('camera');
-            const arContent = document.getElementById('ar-content');
-            const placeBtn = document.getElementById('place-btn');
-            const reticle = document.getElementById('reticle');
-
-            // Get camera position and direction
-            const cameraPos = camera.object3D.position;
-            const distance = 2;
-            const direction = new THREE.Vector3(0, 0, -1);
-            direction.applyQuaternion(camera.object3D.quaternion);
-
-            const placePos = new THREE.Vector3(
-                cameraPos.x + direction.x * distance,
-                cameraPos.y + direction.y * distance - 0.3,
-                cameraPos.z + direction.z * distance
-            );
-
-            // Position content in world space
-            arContent.object3D.position.copy(placePos);
-            arContent.object3D.lookAt(cameraPos);
-            arContent.object3D.rotation.x = 0;
-
-            // Create 3D numbers
-            create3DNumber(scores.barcelona, 'barcelona-score-3d');
-            create3DNumber(scores.realmadrid, 'realmadrid-score-3d');
-
-            // Show content
-            arContent.setAttribute('visible', 'true');
-            placeBtn.classList.add('hidden');
-            reticle.setAttribute('visible', 'false');
-            arPlaced = true;
-
-            console.log('AR content placed at:', placePos);
-        }
-
-        function create3DNumber(num, containerId) {
-            const container = document.getElementById(containerId);
-
-            // Clear existing
-            while (container.firstChild) {
-                container.removeChild(container.firstChild);
-            }
-
-            // Create extruded text
-            const text = document.createElement('a-entity');
-            text.setAttribute('extruded-text', {
-                value: num.toString(),
-                size: 0.6,
-                depth: 0.15,
-                color: '#FFFFFF'
-            });
-
-            container.appendChild(text);
-
-            console.log(`Created 3D number ${num} in ${containerId}`);
-        }
-
-        console.log('AR Football Predictions ready');
-        console.log('Set your score and tap VIEW SCORE IN AR');
-
-        // Initialize winner on load
-        adjustScorePage('barcelona', 0);
+        // Initialize
+        console.log('🚀 Match Predictions App loaded');
     </script>
 </body>
 </html>
