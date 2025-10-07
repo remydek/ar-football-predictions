@@ -646,7 +646,8 @@
             noMatches.style.display = 'none';
 
             try {
-                const response = await fetch(`${API_BASE}/eventsnextleague.php?id=${leagueId}`);
+                // Use current season: 2025-2026
+                const response = await fetch(`${API_BASE}/eventsseason.php?id=${leagueId}&s=2025-2026`);
                 const data = await response.json();
 
                 loading.style.display = 'none';
@@ -656,8 +657,22 @@
                     return;
                 }
 
-                // Show up to 10 matches
-                const matches = data.events.slice(0, 10);
+                // Filter for upcoming matches only (future dates)
+                const today = new Date();
+                today.setHours(0, 0, 0, 0);
+
+                const upcomingMatches = data.events.filter(match => {
+                    const matchDate = new Date(match.dateEvent);
+                    return matchDate >= today;
+                });
+
+                if (upcomingMatches.length === 0) {
+                    noMatches.style.display = 'block';
+                    return;
+                }
+
+                // Show up to 10 upcoming matches
+                const matches = upcomingMatches.slice(0, 10);
 
                 matches.forEach(match => {
                     const card = document.createElement('div');
