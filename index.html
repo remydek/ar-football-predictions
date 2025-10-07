@@ -357,46 +357,69 @@
             margin-bottom: 20px;
         }
 
-        /* Screen 4: Prediction */
+        /* Screen 4: Prediction - Figma Design */
         #prediction-screen {
-            background: linear-gradient(135deg, #4A148C 0%, #1A237E 50%, #B71C1C 100%);
+            background: linear-gradient(90deg, #3B0DC3 0%, #5B1DB8 25%, #8B2DA8 50%, #C03858 75%, #DC1F2E 100%);
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: center;
-            padding: 20px;
+            justify-content: flex-start;
+            padding: 40px 20px 20px;
+        }
+
+        .augmento-logo {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 40px;
+        }
+
+        .augmento-icon {
+            font-size: 24px;
+            color: white;
+        }
+
+        .augmento-text {
+            color: white;
+            font-size: 20px;
+            font-weight: 700;
+            letter-spacing: 1px;
         }
 
         .prediction-card {
             background: white;
-            border-radius: 24px;
-            padding: 40px 30px;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
-            max-width: 400px;
-            width: 90%;
+            border-radius: 32px;
+            padding: 36px 24px;
+            box-shadow: 0 24px 48px rgba(0, 0, 0, 0.3);
+            max-width: 380px;
+            width: 100%;
+        }
+
+        .card-header {
+            text-align: center;
+            margin-bottom: 32px;
         }
 
         .card-title {
-            text-align: center;
-            font-size: 24px;
-            font-weight: 800;
-            margin-bottom: 10px;
+            font-size: 28px;
+            font-weight: 900;
+            line-height: 1.2;
             color: #000;
+            margin-bottom: 8px;
         }
 
         .card-subtitle {
-            text-align: center;
-            font-size: 16px;
-            font-weight: 600;
-            margin-bottom: 30px;
-            color: #333;
+            font-size: 28px;
+            font-weight: 900;
+            line-height: 1.2;
+            color: #000;
         }
 
         .teams-container {
             display: flex;
-            gap: 30px;
-            justify-content: center;
-            margin-bottom: 30px;
+            gap: 8px;
+            align-items: center;
+            margin-bottom: 28px;
         }
 
         .team-box {
@@ -404,71 +427,129 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 15px;
-            padding: 20px;
-            border-radius: 16px;
-            border: 3px solid #e0e0e0;
+            gap: 12px;
+            padding: 16px 12px;
+            border-radius: 20px;
+            background: #F5F5F5;
+            border: 4px solid transparent;
+            position: relative;
+            transition: all 0.3s;
         }
 
-        .team-box.selected {
-            border-color: #4CAF50;
-            border-width: 4px;
-            background: #f1f8f4;
+        .team-box.winner {
+            border-color: #00FF8C;
+            background: rgba(0, 255, 140, 0.05);
         }
 
-        .team-logo {
-            width: 80px;
-            height: 80px;
-            border-radius: 12px;
-            background: #f5f5f5;
+        .team-badge {
+            width: 90px;
+            height: 90px;
             display: flex;
             align-items: center;
             justify-content: center;
+            margin-bottom: 8px;
         }
 
-        .team-logo img {
-            width: 70px;
-            height: 70px;
+        .team-badge img {
+            width: 100%;
+            height: 100%;
             object-fit: contain;
         }
 
-        .vs-text {
-            font-size: 20px;
-            font-weight: 900;
-            color: #666;
-            align-self: center;
+        .prediction-team-name {
+            font-size: 14px;
+            font-weight: 700;
+            text-align: center;
+            color: #000;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
 
-        .prediction-team-name {
-            font-size: 12px;
+        .score-display {
+            background: white;
+            border-radius: 16px;
+            padding: 16px 24px;
+            min-width: 80px;
+            text-align: center;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+        }
+
+        .score-number {
+            font-size: 52px;
+            font-weight: 900;
+            color: #000;
+            line-height: 1;
+        }
+
+        .winner-badge {
+            background: #00FF8C;
+            color: #000;
+            padding: 6px 16px;
+            border-radius: 8px;
+            font-size: 11px;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+        }
+
+        .vs-separator {
+            font-size: 20px;
+            font-weight: 900;
+            color: #000;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            margin: 0 4px;
+        }
+
+        .vs-text {
+            font-size: 16px;
+        }
+
+        .vs-colon {
+            font-size: 24px;
+            line-height: 0.5;
+        }
+
+        .ar-view-btn {
+            width: 100%;
+            padding: 18px;
+            background: #000000;
+            border: none;
+            border-radius: 16px;
+            color: white;
+            font-size: 15px;
             font-weight: 700;
             text-transform: uppercase;
             letter-spacing: 1px;
-            color: #333;
-            text-align: center;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            transition: all 0.2s;
         }
 
-        .score-input {
-            font-size: 48px;
-            font-weight: 900;
-            text-align: center;
-            color: #000;
-            min-width: 80px;
+        .ar-view-btn:active {
+            transform: scale(0.98);
+            background: #1a1a1a;
         }
 
         .score-controls {
             display: flex;
-            gap: 10px;
+            gap: 8px;
+            margin-top: 8px;
         }
 
         .score-btn {
-            width: 45px;
-            height: 45px;
-            border-radius: 12px;
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
             border: none;
             background: #00FF8C;
             color: #000000;
-            font-size: 24px;
+            font-size: 20px;
             font-weight: 700;
             cursor: pointer;
             transition: all 0.2s;
@@ -476,39 +557,6 @@
 
         .score-btn:active {
             transform: scale(0.95);
-            background: #00DD7A;
-        }
-
-        .winner-badge {
-            background: #4CAF50;
-            color: white;
-            padding: 4px 12px;
-            border-radius: 12px;
-            font-size: 10px;
-            font-weight: 800;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
-        .share-btn {
-            width: 100%;
-            padding: 18px;
-            background: #00FF8C;
-            border: none;
-            border-radius: 16px;
-            color: #000000;
-            font-size: 16px;
-            font-weight: 700;
-            text-transform: uppercase;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-        }
-
-        .share-btn:active {
-            transform: scale(0.98);
             background: #00DD7A;
         }
     </style>
@@ -575,17 +623,26 @@
             <button class="back-btn" onclick="navigateTo('matches')" style="background: rgba(255, 255, 255, 0.3); color: white;">←</button>
         </div>
 
+        <div class="augmento-logo">
+            <div class="augmento-icon">△</div>
+            <div class="augmento-text">augmento</div>
+        </div>
+
         <div class="prediction-card">
-            <div class="card-title">Make Your Prediction!</div>
-            <div class="card-subtitle">Share your score and WIN!</div>
+            <div class="card-header">
+                <div class="card-title">Pick a winner!</div>
+                <div class="card-subtitle">Share your predictions and WIN!</div>
+            </div>
 
             <div class="teams-container">
                 <div class="team-box" id="prediction-team-home">
-                    <div class="team-logo">
+                    <div class="team-badge">
                         <img id="pred-home-logo" src="" alt="" onerror="this.style.display='none'">
                     </div>
                     <div class="prediction-team-name" id="pred-home-name">Team 1</div>
-                    <div class="score-input" id="score-home">0</div>
+                    <div class="score-display">
+                        <div class="score-number" id="score-home">0</div>
+                    </div>
                     <div class="score-controls">
                         <button class="score-btn" onclick="adjustScore('home', -1)">−</button>
                         <button class="score-btn" onclick="adjustScore('home', 1)">+</button>
@@ -593,14 +650,19 @@
                     <div class="winner-badge" id="winner-home" style="visibility: hidden;">WINNER!</div>
                 </div>
 
-                <div class="vs-text">VS</div>
+                <div class="vs-separator">
+                    <div class="vs-text">VS</div>
+                    <div class="vs-colon">:</div>
+                </div>
 
                 <div class="team-box" id="prediction-team-away">
-                    <div class="team-logo">
+                    <div class="team-badge">
                         <img id="pred-away-logo" src="" alt="" onerror="this.style.display='none'">
                     </div>
                     <div class="prediction-team-name" id="pred-away-name">Team 2</div>
-                    <div class="score-input" id="score-away">0</div>
+                    <div class="score-display">
+                        <div class="score-number" id="score-away">0</div>
+                    </div>
                     <div class="score-controls">
                         <button class="score-btn" onclick="adjustScore('away', -1)">−</button>
                         <button class="score-btn" onclick="adjustScore('away', 1)">+</button>
@@ -609,8 +671,8 @@
                 </div>
             </div>
 
-            <button class="share-btn" onclick="sharePrediction()">
-                📤 SHARE PREDICTION
+            <button class="ar-view-btn" onclick="sharePrediction()">
+                📷 VIEW SCORE IN AR
             </button>
         </div>
     </div>
@@ -838,18 +900,18 @@
             if (state.scores.home > state.scores.away) {
                 homeBadge.style.visibility = 'visible';
                 awayBadge.style.visibility = 'hidden';
-                homeBox.classList.add('selected');
-                awayBox.classList.remove('selected');
+                homeBox.classList.add('winner');
+                awayBox.classList.remove('winner');
             } else if (state.scores.away > state.scores.home) {
                 homeBadge.style.visibility = 'hidden';
                 awayBadge.style.visibility = 'visible';
-                homeBox.classList.remove('selected');
-                awayBox.classList.add('selected');
+                homeBox.classList.remove('winner');
+                awayBox.classList.add('winner');
             } else {
                 homeBadge.style.visibility = 'hidden';
                 awayBadge.style.visibility = 'hidden';
-                homeBox.classList.remove('selected');
-                awayBox.classList.remove('selected');
+                homeBox.classList.remove('winner');
+                awayBox.classList.remove('winner');
             }
         }
 
