@@ -114,6 +114,99 @@
             100% { transform: rotate(360deg); }
         }
 
+        /* Loading Screen */
+        #loading-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #3B0DC3 0%, #8B2DA8 50%, #DC1F2E 100%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+            animation: fadeOut 0.5s ease-out 2s forwards;
+        }
+
+        @keyframes fadeOut {
+            to {
+                opacity: 0;
+                visibility: hidden;
+            }
+        }
+
+        .loading-logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 40px;
+            animation: scaleIn 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        @keyframes scaleIn {
+            0% {
+                transform: scale(0);
+                opacity: 0;
+            }
+            100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        .loading-icon {
+            font-size: 48px;
+            color: white;
+            animation: rotate360 2s ease-in-out infinite;
+        }
+
+        @keyframes rotate360 {
+            0%, 100% { transform: rotate(0deg); }
+            50% { transform: rotate(180deg); }
+        }
+
+        .loading-text {
+            color: white;
+            font-size: 36px;
+            font-weight: 900;
+            letter-spacing: 2px;
+        }
+
+        .loading-dots {
+            display: flex;
+            gap: 8px;
+            margin-top: 30px;
+        }
+
+        .loading-dot {
+            width: 12px;
+            height: 12px;
+            background: white;
+            border-radius: 50%;
+            animation: bounce 1.4s infinite ease-in-out;
+        }
+
+        .loading-dot:nth-child(1) {
+            animation-delay: -0.32s;
+        }
+
+        .loading-dot:nth-child(2) {
+            animation-delay: -0.16s;
+        }
+
+        @keyframes bounce {
+            0%, 80%, 100% {
+                transform: scale(0);
+                opacity: 0.5;
+            }
+            40% {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
         /* Screen 1: Home */
         #home-screen {
             background: linear-gradient(135deg, #4A148C 0%, #1A237E 50%, #B71C1C 100%);
@@ -124,23 +217,64 @@
             text-align: center;
             color: white;
             padding: 20px;
+            position: relative;
+            overflow: hidden;
         }
 
-        .home-logo {
-            font-size: 48px;
-            margin-bottom: 20px;
+        #home-screen::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 1px, transparent 1px);
+            background-size: 50px 50px;
+            animation: moveGrid 20s linear infinite;
+            opacity: 0.3;
+        }
+
+        @keyframes moveGrid {
+            0% {
+                transform: translate(0, 0);
+            }
+            100% {
+                transform: translate(50px, 50px);
+            }
+        }
+
+        .home-content {
+            position: relative;
+            z-index: 1;
+            animation: fadeInUp 0.8s ease-out 2.2s backwards;
+        }
+
+        @keyframes fadeInUp {
+            0% {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         .home-title {
-            font-size: 32px;
+            font-size: 42px;
             font-weight: 900;
-            margin-bottom: 10px;
+            margin-bottom: 12px;
+            background: linear-gradient(135deg, #fff 0%, #00FF8C 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
         }
 
         .home-subtitle {
             font-size: 16px;
-            margin-bottom: 50px;
+            margin-bottom: 60px;
             opacity: 0.9;
+            line-height: 1.5;
         }
 
         .sports-grid {
@@ -149,36 +283,67 @@
             gap: 20px;
             width: 100%;
             max-width: 400px;
+            position: relative;
+            z-index: 1;
         }
 
         .sport-card {
-            background: white;
-            border-radius: 20px;
-            padding: 30px;
+            background: rgba(255, 255, 255, 0.98);
+            border-radius: 24px;
+            padding: 40px 30px;
             cursor: pointer;
-            transition: transform 0.2s;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+            position: relative;
+            overflow: hidden;
+            backdrop-filter: blur(10px);
+        }
+
+        .sport-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(0, 255, 140, 0.2), transparent);
+            transition: left 0.5s;
+        }
+
+        .sport-card:hover::before {
+            left: 100%;
         }
 
         .sport-card:active {
-            transform: scale(0.98);
+            transform: scale(0.96);
         }
 
         .sport-icon {
-            font-size: 48px;
-            margin-bottom: 15px;
+            font-size: 64px;
+            margin-bottom: 20px;
+            animation: floatIcon 3s ease-in-out infinite;
+        }
+
+        @keyframes floatIcon {
+            0%, 100% {
+                transform: translateY(0px);
+            }
+            50% {
+                transform: translateY(-10px);
+            }
         }
 
         .sport-name {
-            font-size: 24px;
-            font-weight: 800;
+            font-size: 28px;
+            font-weight: 900;
             color: #333;
-            margin-bottom: 5px;
+            margin-bottom: 8px;
         }
 
         .sport-subtitle {
-            font-size: 14px;
+            font-size: 15px;
             color: #666;
+            font-weight: 500;
         }
 
         /* Screen 2: Leagues */
@@ -562,17 +727,31 @@
     </style>
 </head>
 <body>
+    <!-- Loading Screen -->
+    <div id="loading-screen">
+        <div class="loading-logo">
+            <div class="loading-icon">△</div>
+            <div class="loading-text">augmento</div>
+        </div>
+        <div class="loading-dots">
+            <div class="loading-dot"></div>
+            <div class="loading-dot"></div>
+            <div class="loading-dot"></div>
+        </div>
+    </div>
+
     <!-- Screen 1: Home -->
     <div id="home-screen" class="screen active">
-        <div class="home-logo">⚽</div>
-        <h1 class="home-title">Match Predictions</h1>
-        <p class="home-subtitle">Pick your sport and make your predictions</p>
+        <div class="home-content">
+            <h1 class="home-title">AR Sports Predictions</h1>
+            <p class="home-subtitle">Pick your sport and show your predictions in real life!</p>
 
-        <div class="sports-grid">
-            <div class="sport-card" onclick="navigateTo('leagues')">
-                <div class="sport-icon">⚽</div>
-                <div class="sport-name">Football</div>
-                <div class="sport-subtitle">View leagues & matches</div>
+            <div class="sports-grid">
+                <div class="sport-card" onclick="navigateTo('leagues')">
+                    <div class="sport-icon">⚽</div>
+                    <div class="sport-name">Football</div>
+                    <div class="sport-subtitle">View leagues & matches</div>
+                </div>
             </div>
         </div>
     </div>
