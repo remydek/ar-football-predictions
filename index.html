@@ -626,15 +626,20 @@
             matches: []
         };
 
-        const API_BASE = 'https://www.thesportsdb.com/api/v1/json/3';
+        const API_BASE = 'https://www.thesportsdb.com/api/v1/json/248104';
 
-        // Popular leagues for MVP
+        // Featured leagues with Premium API access
         const FEATURED_LEAGUES = [
+            // Top 5 Domestic Leagues
             { id: '4328', name: 'English Premier League', country: 'England', icon: '🏴󠁧󠁢󠁥󠁮󠁧󠁿' },
             { id: '4335', name: 'Spanish La Liga', country: 'Spain', icon: '🇪🇸' },
             { id: '4332', name: 'Italian Serie A', country: 'Italy', icon: '🇮🇹' },
             { id: '4331', name: 'German Bundesliga', country: 'Germany', icon: '🇩🇪' },
-            { id: '4334', name: 'French Ligue 1', country: 'France', icon: '🇫🇷' }
+            { id: '4334', name: 'French Ligue 1', country: 'France', icon: '🇫🇷' },
+            // UEFA Competitions (Premium Only)
+            { id: '4480', name: 'UEFA Champions League', country: 'Europe', icon: '🏆' },
+            { id: '4481', name: 'UEFA Europa League', country: 'Europe', icon: '🥈' },
+            { id: '4490', name: 'UEFA Nations League', country: 'International', icon: '🌍' }
         ];
 
         // Navigation
@@ -868,6 +873,7 @@
 
         // Initialize
         console.log('🚀 Match Predictions App loaded');
+        console.log('✨ Premium API activated - UEFA competitions available');
     </script>
 </body>
 </html>
