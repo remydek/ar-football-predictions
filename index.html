@@ -2,8 +2,10 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="theme-color" content="#4A148C">
     <title>Match Predictions</title>
 
     <style>
@@ -15,25 +17,51 @@
 
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-            overflow-x: hidden;
+            overflow: hidden;
             background: #f5f5f5;
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        /* Hide scrollbars but keep functionality */
+        .leagues-container::-webkit-scrollbar,
+        .matches-container::-webkit-scrollbar {
+            display: none;
+        }
+
+        .leagues-container,
+        .matches-container {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
         }
 
         /* Common Styles */
         .screen {
-            display: none;
-            min-height: 100vh;
-            padding: 20px;
-            animation: fadeIn 0.3s ease;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateX(100%);
+            transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1),
+                        opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1),
+                        visibility 0.4s;
         }
 
         .screen.active {
-            display: block;
+            opacity: 1;
+            visibility: visible;
+            transform: translateX(0);
         }
 
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
+        .screen.exit-left {
+            transform: translateX(-30%);
+            opacity: 0;
         }
 
         .header {
@@ -95,6 +123,7 @@
             justify-content: center;
             text-align: center;
             color: white;
+            padding: 20px;
         }
 
         .home-logo {
@@ -155,12 +184,22 @@
         /* Screen 2: Leagues */
         #leagues-screen {
             background: #f5f5f5;
+            display: flex;
+            flex-direction: column;
+            padding: 20px;
+        }
+
+        .leagues-container {
+            flex: 1;
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
         }
 
         .leagues-grid {
             display: grid;
             grid-template-columns: 1fr;
             gap: 15px;
+            padding-bottom: 20px;
         }
 
         .league-card {
@@ -210,12 +249,22 @@
         /* Screen 3: Matches */
         #matches-screen {
             background: #f5f5f5;
+            display: flex;
+            flex-direction: column;
+            padding: 20px;
+        }
+
+        .matches-container {
+            flex: 1;
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
         }
 
         .matches-list {
             display: flex;
             flex-direction: column;
             gap: 15px;
+            padding-bottom: 20px;
         }
 
         .match-card {
@@ -315,6 +364,7 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
+            padding: 20px;
         }
 
         .prediction-card {
@@ -486,12 +536,14 @@
             <h2 class="header-title">Football Leagues</h2>
         </div>
 
-        <div id="leagues-loading" class="loading">
-            <div class="spinner"></div>
-            <p>Loading leagues...</p>
-        </div>
+        <div class="leagues-container">
+            <div id="leagues-loading" class="loading">
+                <div class="spinner"></div>
+                <p>Loading leagues...</p>
+            </div>
 
-        <div id="leagues-grid" class="leagues-grid"></div>
+            <div id="leagues-grid" class="leagues-grid"></div>
+        </div>
     </div>
 
     <!-- Screen 3: Matches -->
@@ -501,17 +553,19 @@
             <h2 class="header-title" id="matches-title">Upcoming Matches</h2>
         </div>
 
-        <div id="matches-loading" class="loading">
-            <div class="spinner"></div>
-            <p>Loading matches...</p>
-        </div>
+        <div class="matches-container">
+            <div id="matches-loading" class="loading">
+                <div class="spinner"></div>
+                <p>Loading matches...</p>
+            </div>
 
-        <div id="matches-list" class="matches-list"></div>
+            <div id="matches-list" class="matches-list"></div>
 
-        <div id="no-matches" class="no-matches" style="display: none;">
-            <div class="no-matches-icon">📅</div>
-            <h3>No Upcoming Matches</h3>
-            <p>Check back later for new fixtures</p>
+            <div id="no-matches" class="no-matches" style="display: none;">
+                <div class="no-matches-icon">📅</div>
+                <h3>No Upcoming Matches</h3>
+                <p>Check back later for new fixtures</p>
+            </div>
         </div>
     </div>
 
@@ -587,11 +641,30 @@
         function navigateTo(screen, data = null) {
             console.log(`Navigating to ${screen}`, data);
 
-            // Hide all screens
-            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+            const currentScreen = document.querySelector('.screen.active');
+            const targetScreen = document.getElementById(`${screen}-screen`);
+
+            // Remove all screens from active/exit states
+            document.querySelectorAll('.screen').forEach(s => {
+                s.classList.remove('active', 'exit-left');
+            });
+
+            // Determine navigation direction
+            const screenOrder = ['home', 'leagues', 'matches', 'prediction'];
+            const currentIndex = screenOrder.indexOf(state.currentScreen);
+            const targetIndex = screenOrder.indexOf(screen);
+            const isForward = targetIndex > currentIndex;
+
+            // Animate current screen out
+            if (currentScreen && !isForward) {
+                currentScreen.classList.add('exit-left');
+            }
 
             // Show target screen
-            document.getElementById(`${screen}-screen`).classList.add('active');
+            setTimeout(() => {
+                targetScreen.classList.add('active');
+            }, isForward ? 0 : 50);
+
             state.currentScreen = screen;
 
             // Load data based on screen
