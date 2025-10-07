@@ -613,6 +613,7 @@
             width: 100%;
             height: 100%;
             object-fit: contain;
+            display: block;
         }
 
         .prediction-team-name {
@@ -828,7 +829,7 @@
             <div class="teams-container">
                 <div class="team-box" id="prediction-team-home">
                     <div class="team-badge">
-                        <img id="pred-home-logo" src="" alt="" onerror="this.style.display='none'">
+                        <img id="pred-home-logo" alt="Home Team">
                     </div>
                     <div class="prediction-team-name" id="pred-home-name">Team 1</div>
                     <div class="score-display">
@@ -848,7 +849,7 @@
 
                 <div class="team-box" id="prediction-team-away">
                     <div class="team-badge">
-                        <img id="pred-away-logo" src="" alt="" onerror="this.style.display='none'">
+                        <img id="pred-away-logo" alt="Away Team">
                     </div>
                     <div class="prediction-team-name" id="pred-away-name">Team 2</div>
                     <div class="score-display">
@@ -1062,10 +1063,40 @@
 
         // Load Prediction Screen
         function loadPrediction(match) {
+            console.log('Loading prediction for:', match);
+            console.log('Home badge URL:', match.homeBadge);
+            console.log('Away badge URL:', match.awayBadge);
+
             document.getElementById('pred-home-name').textContent = match.homeTeam;
             document.getElementById('pred-away-name').textContent = match.awayTeam;
-            document.getElementById('pred-home-logo').src = match.homeBadge;
-            document.getElementById('pred-away-logo').src = match.awayBadge;
+
+            const homeLogo = document.getElementById('pred-home-logo');
+            const awayLogo = document.getElementById('pred-away-logo');
+
+            // Set logos with fallback
+            if (match.homeBadge) {
+                homeLogo.src = match.homeBadge;
+                homeLogo.style.display = 'block';
+                homeLogo.onerror = function() {
+                    console.error('Failed to load home badge:', match.homeBadge);
+                    this.style.display = 'none';
+                };
+            } else {
+                homeLogo.style.display = 'none';
+                console.warn('No home badge URL provided');
+            }
+
+            if (match.awayBadge) {
+                awayLogo.src = match.awayBadge;
+                awayLogo.style.display = 'block';
+                awayLogo.onerror = function() {
+                    console.error('Failed to load away badge:', match.awayBadge);
+                    this.style.display = 'none';
+                };
+            } else {
+                awayLogo.style.display = 'none';
+                console.warn('No away badge URL provided');
+            }
 
             // Reset scores
             state.scores = { home: 0, away: 0 };
