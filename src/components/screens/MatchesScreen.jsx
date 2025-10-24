@@ -35,7 +35,8 @@ export const MatchesScreen = () => {
         {matches && matches.length > 0 && (
           <div className="flex flex-col gap-4">
             {matches.map((match) => {
-              const date = new Date(match.date);
+              // TheSportsDB provides timestamp in ISO format
+              const date = new Date(match.timestamp || match.date);
               const formattedDate = date.toLocaleDateString('en-US', {
                 weekday: 'short',
                 month: 'short',

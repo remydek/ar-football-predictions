@@ -1,23 +1,27 @@
 import { useQuery } from '@tanstack/react-query';
-import { polymarketAPI } from '../api/polymarket';
+import { sportsDbAPI } from '../api/thesportsdb';
 
 export const useLeagueMatches = (league) => {
   return useQuery({
-    queryKey: ['matches', league?.series],
+    queryKey: ['matches', league?.leagueId],
     queryFn: async () => {
       if (!league) return [];
-      const events = await polymarketAPI.getLeagueEvents(league.series);
 
-      // Filter for upcoming matches
+      console.log('[HOOK] Fetching matches for league:', league);
+      const events = await sportsDbAPI.getNextLeagueEvents(league.leagueId);
+
+      // Filter for upcoming and "Not Started" matches only
       const now = new Date();
       const upcomingMatches = events
         .filter(event => {
-          const endDate = new Date(event.endDate);
-          return endDate >= now && event.markets && event.markets.length > 0;
+          const eventDate = new Date(event.dateEvent);
+          // Only show matches that haven't started yet
+          return eventDate >= now && event.strStatus === 'Not Started';
         })
-        .map(event => polymarketAPI.parseMatchFromEvent(event))
-        .slice(0, 10);
+        .map(event => sportsDbAPI.parseMatchFromEvent(event))
+        .slice(0, 15); // Show top 15 upcoming matches
 
+      console.log('[HOOK] Filtered matches:', upcomingMatches.length);
       return upcomingMatches;
     },
     enabled: !!league,
