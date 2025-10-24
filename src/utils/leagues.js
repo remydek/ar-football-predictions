@@ -6,9 +6,9 @@ export const FOOTBALL_LEAGUES = [
   { sport: 'bun', name: 'German Bundesliga', country: 'Germany', icon: '🇩🇪', leagueId: '4331', season: '2025-2026', badge: 'https://r2.thesportsdb.com/images/media/league/badge/teqh1b1679952008.png' },
   { sport: 'fl1', name: 'French Ligue 1', country: 'France', icon: '🇫🇷', leagueId: '4334', season: '2025-2026', badge: 'https://r2.thesportsdb.com/images/media/league/badge/9f7z9d1742983155.png' },
   // Other Top Leagues
-  { sport: 'ere', name: 'Dutch Eredivisie', country: 'Netherlands', icon: '🇳🇱', leagueId: '4337', season: '2025-2026', badge: 'https://r2.thesportsdb.com/images/media/league/badge/5jojbh1719243736.png' },
+  { sport: 'ere', name: 'Dutch Eredivisie', country: 'Netherlands', icon: '🇳🇱', leagueId: '4337', season: '2025-2026', badge: 'https://r2.thesportsdb.com/images/media/league/badge/5cdsu21725984946.png' },
   { sport: 'por', name: 'Portuguese Liga', country: 'Portugal', icon: '🇵🇹', leagueId: '4344', season: '2025-2026', badge: 'https://r2.thesportsdb.com/images/media/league/badge/lkfko71751917970.png' },
-  { sport: 'mls', name: 'MLS', country: 'USA/Canada', icon: '🇺🇸', leagueId: '4346', season: '2025', badge: 'https://r2.thesportsdb.com/images/media/league/badge/pj2gfm1519321838.png' },
+  { sport: 'mls', name: 'MLS', country: 'USA/Canada', icon: '🇺🇸', leagueId: '4346', season: '2025', badge: 'https://r2.thesportsdb.com/images/media/league/badge/dqo6r91549878326.png' },
   { sport: 'arg', name: 'Argentina Primera', country: 'Argentina', icon: '🇦🇷', leagueId: '4406', season: '2025', badge: 'https://r2.thesportsdb.com/images/media/league/badge/1vslha1589960216.png' },
   { sport: 'bra', name: 'Brazilian Serie A', country: 'Brazil', icon: '🇧🇷', leagueId: '4351', season: '2025', badge: 'https://r2.thesportsdb.com/images/media/league/badge/dmu4oq1753306626.png' },
   // UEFA Competitions
@@ -16,7 +16,7 @@ export const FOOTBALL_LEAGUES = [
   { sport: 'uel', name: 'UEFA Europa League', country: 'Europe', icon: '🥈', leagueId: '4481', season: '2024-2025', badge: 'https://r2.thesportsdb.com/images/media/league/badge/7aq2xh1561970121.png' },
   { sport: 'uec', name: 'UEFA Conference League', country: 'Europe', icon: '🥉', leagueId: '4490', season: '2024-2025', badge: 'https://r2.thesportsdb.com/images/media/league/badge/5e61to1621434910.png' },
   // International Competitions
-  { sport: 'wc', name: 'FIFA World Cup', country: 'International', icon: '🌍', leagueId: '4429', season: '2026', badge: 'https://r2.thesportsdb.com/images/media/league/badge/p4d6c61663357448.png' },
-  { sport: 'euro', name: 'UEFA Euro', country: 'Europe', icon: '🏆', leagueId: '4450', season: '2028', badge: 'https://r2.thesportsdb.com/images/media/league/badge/xz1rf21556035391.png' },
-  { sport: 'copa', name: 'Copa America', country: 'South America', icon: '🌎', leagueId: '5518', season: '2024', badge: 'https://r2.thesportsdb.com/images/media/league/badge/6qzscl1705849613.png' },
+  { sport: 'wc', name: 'FIFA World Cup', country: 'International', icon: '🌍', leagueId: '4429', season: '2026', badge: 'https://r2.thesportsdb.com/images/media/league/badge/e7er5g1696521789.png' },
+  { sport: 'euro', name: 'UEFA Euro', country: 'Europe', icon: '🏆', leagueId: '4450', season: '2028', badge: 'https://r2.thesportsdb.com/images/media/league/badge/sqyqty1454525104.png' },
+  { sport: 'copa', name: 'Copa America', country: 'South America', icon: '🌎', leagueId: '5518', season: '2024', badge: 'https://r2.thesportsdb.com/images/media/league/badge/iyk1861730133378.png' },
 ];
