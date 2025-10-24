@@ -52,8 +52,17 @@ export const MatchesScreen = () => {
 
                   <div className="flex items-center justify-between mb-5">
                     <div className="flex-1 flex flex-col items-center gap-2.5">
-                      <div className="w-[60px] h-[60px] bg-gray-200 rounded-full flex items-center justify-center text-2xl">
-                        ⚽
+                      <div className="w-[60px] h-[60px] bg-white rounded-full flex items-center justify-center overflow-hidden">
+                        <img
+                          src={match.homeTeamBadge}
+                          alt={match.homeTeam}
+                          className="w-full h-full object-contain p-2"
+                          onError={(e) => {
+                            e.target.style.display = 'none';
+                            e.target.parentElement.innerHTML = '⚽';
+                            e.target.parentElement.style.fontSize = '24px';
+                          }}
+                        />
                       </div>
                       <div className="text-sm font-bold text-center text-white">
                         {match.homeTeam}
@@ -63,8 +72,17 @@ export const MatchesScreen = () => {
                     <div className="text-base font-black text-white px-4">VS</div>
 
                     <div className="flex-1 flex flex-col items-center gap-2.5">
-                      <div className="w-[60px] h-[60px] bg-gray-200 rounded-full flex items-center justify-center text-2xl">
-                        ⚽
+                      <div className="w-[60px] h-[60px] bg-white rounded-full flex items-center justify-center overflow-hidden">
+                        <img
+                          src={match.awayTeamBadge}
+                          alt={match.awayTeam}
+                          className="w-full h-full object-contain p-2"
+                          onError={(e) => {
+                            e.target.style.display = 'none';
+                            e.target.parentElement.innerHTML = '⚽';
+                            e.target.parentElement.style.fontSize = '24px';
+                          }}
+                        />
                       </div>
                       <div className="text-sm font-bold text-center text-white">
                         {match.awayTeam}

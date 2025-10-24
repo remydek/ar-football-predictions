@@ -63,7 +63,7 @@ export const polymarketAPI = {
 
   // Parse match data from event
   parseMatchFromEvent(event) {
-    const vsMatch = event.title.match(/(.+)\s+vs\s+(.+)/i);
+    const vsMatch = event.title.match(/(.+)\s+vs\.?\s+(.+)/i);
     let homeTeam = 'Team 1';
     let awayTeam = 'Team 2';
 
@@ -72,14 +72,88 @@ export const polymarketAPI = {
       awayTeam = vsMatch[2].trim();
     }
 
+    // Generate team badge URLs using TheSportsDB
+    const getTeamBadge = (teamName) => {
+      // Map common team name variations to their proper names
+      const teamMap = {
+        'Leeds United': 'Leeds',
+        'West Ham': 'West_Ham',
+        'Chelsea': 'Chelsea',
+        'Sunderland AFC': 'Sunderland',
+        'Manchester United': 'Man_Utd',
+        'Manchester City': 'Man_City',
+        'Liverpool': 'Liverpool',
+        'Arsenal': 'Arsenal',
+        'Tottenham': 'Tottenham',
+        'Newcastle United': 'Newcastle',
+        'Brighton': 'Brighton',
+        'Aston Villa': 'Aston_Villa',
+        'Everton': 'Everton',
+        'Fulham': 'Fulham',
+        'Crystal Palace': 'Crystal_Palace',
+        'Brentford': 'Brentford',
+        'Nottingham Forest': 'Nottingham',
+        'Wolverhampton': 'Wolves',
+        'Southampton': 'Southampton',
+        'Leicester City': 'Leicester',
+        'Ipswich Town': 'Ipswich',
+        'Bournemouth': 'Bournemouth',
+      };
+
+      const mappedName = teamMap[teamName] || teamName.replace(/\s+/g, '_');
+      return `https://resources.premierleague.com/premierleague/badges/70/t${this.getTeamId(teamName)}.png`;
+    };
+
     return {
       id: event.id,
       homeTeam,
       awayTeam,
+      homeTeamBadge: getTeamBadge(homeTeam),
+      awayTeamBadge: getTeamBadge(awayTeam),
       date: event.endDate,
       markets: event.markets || [],
       image: event.image,
       slug: event.slug,
     };
+  },
+
+  // Get Premier League team IDs
+  getTeamId(teamName) {
+    const teamIds = {
+      'Leeds': '7',
+      'Leeds United': '7',
+      'West Ham': '21',
+      'Chelsea': '4',
+      'Sunderland': '56',
+      'Sunderland AFC': '56',
+      'Manchester United': '1',
+      'Man Utd': '1',
+      'Manchester City': '43',
+      'Man City': '43',
+      'Liverpool': '10',
+      'Arsenal': '3',
+      'Tottenham': '6',
+      'Tottenham Hotspur': '6',
+      'Newcastle': '23',
+      'Newcastle United': '23',
+      'Brighton': '131',
+      'Aston Villa': '7',
+      'Everton': '11',
+      'Fulham': '54',
+      'Crystal Palace': '31',
+      'Brentford': '94',
+      'Nottingham Forest': '17',
+      'Nottingham': '17',
+      'Wolverhampton': '39',
+      'Wolves': '39',
+      'Southampton': '20',
+      'Leicester': '13',
+      'Leicester City': '13',
+      'Ipswich': '40',
+      'Ipswich Town': '40',
+      'Bournemouth': '91',
+    };
+
+    return teamIds[teamName] || '1';
   }
 };
