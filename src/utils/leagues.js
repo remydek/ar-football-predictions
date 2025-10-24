@@ -6,7 +6,7 @@ export const FOOTBALL_LEAGUES = [
   { sport: 'bun', name: 'German Bundesliga', country: 'Germany', icon: '🇩🇪', leagueId: '4331', season: '2025-2026' },
   { sport: 'fl1', name: 'French Ligue 1', country: 'France', icon: '🇫🇷', leagueId: '4334', season: '2025-2026' },
   // Other Top Leagues
-  { sport: 'ere', name: 'Dutch Eredivisie', country: 'Netherlands', icon: '🇳🇱', leagueId: '4346', season: '2025-2026' },
+  { sport: 'ere', name: 'Dutch Eredivisie', country: 'Netherlands', icon: '🇳🇱', leagueId: '4337', season: '2025-2026' },
   { sport: 'por', name: 'Portuguese Liga', country: 'Portugal', icon: '🇵🇹', leagueId: '4344', season: '2025-2026' },
   { sport: 'mls', name: 'MLS', country: 'USA/Canada', icon: '🇺🇸', leagueId: '4346', season: '2025' },
   { sport: 'arg', name: 'Argentina Primera', country: 'Argentina', icon: '🇦🇷', leagueId: '4406', season: '2025' },
