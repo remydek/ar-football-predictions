@@ -16,7 +16,7 @@ export const HomeScreen = () => {
         {/* Sports balls image */}
         <div className="w-full h-[280px] mb-10 relative"
              style={{
-               backgroundImage: 'url(/assets/ball-sports-optimized.png)',
+               backgroundImage: 'url(/ball-sports-optimized.png)',
                backgroundSize: 'contain',
                backgroundRepeat: 'no-repeat',
                backgroundPosition: 'center',
