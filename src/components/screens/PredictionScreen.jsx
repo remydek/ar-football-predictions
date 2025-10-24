@@ -66,11 +66,11 @@ export const PredictionScreen = () => {
 
         <div className="flex gap-2 items-center mb-7">
           <div className={`flex-1 flex flex-col items-center gap-3 p-4 rounded-[20px] bg-gray-100 border-4 transition-all ${winner === 'home' ? 'border-[#00FF8C] bg-[#00FF8C]/5' : 'border-transparent'}`}>
-            <div className="w-[90px] h-[90px] bg-white rounded-full flex items-center justify-center mb-2 overflow-hidden">
+            <div className="w-[100px] h-[100px] flex items-center justify-center mb-2">
               <img
                 src={match.homeTeamBadge}
                 alt={match.homeTeam}
-                className="w-full h-full object-contain p-3"
+                className="w-full h-full object-contain"
                 onError={(e) => {
                   e.target.style.display = 'none';
                   e.target.parentElement.innerHTML = '⚽';
@@ -113,11 +113,11 @@ export const PredictionScreen = () => {
           </div>
 
           <div className={`flex-1 flex flex-col items-center gap-3 p-4 rounded-[20px] bg-gray-100 border-4 transition-all ${winner === 'away' ? 'border-[#00FF8C] bg-[#00FF8C]/5' : 'border-transparent'}`}>
-            <div className="w-[90px] h-[90px] bg-white rounded-full flex items-center justify-center mb-2 overflow-hidden">
+            <div className="w-[100px] h-[100px] flex items-center justify-center mb-2">
               <img
                 src={match.awayTeamBadge}
                 alt={match.awayTeam}
-                className="w-full h-full object-contain p-3"
+                className="w-full h-full object-contain"
                 onError={(e) => {
                   e.target.style.display = 'none';
                   e.target.parentElement.innerHTML = '⚽';

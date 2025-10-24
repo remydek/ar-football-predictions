@@ -18,8 +18,17 @@ export const LeaguesScreen = () => {
               onClick={() => navigate(`/matches/${league.sport}`, { state: { league } })}
             >
               <div className="flex items-center gap-4">
-                <div className="w-[50px] h-[50px] rounded-lg text-[32px] flex items-center justify-center">
-                  {league.icon}
+                <div className="w-[60px] h-[60px] flex items-center justify-center">
+                  <img
+                    src={league.badge}
+                    alt={league.name}
+                    className="w-full h-full object-contain"
+                    onError={(e) => {
+                      e.target.style.display = 'none';
+                      e.target.parentElement.innerHTML = league.icon;
+                      e.target.parentElement.style.fontSize = '32px';
+                    }}
+                  />
                 </div>
                 <div className="flex-1">
                   <div className="text-base font-bold text-white mb-1">{league.name}</div>
