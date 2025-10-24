@@ -1,0 +1,12 @@
+To add your 3D sports balls welcome image:
+
+1. Save your image as: sports-balls.png
+2. Place it in this assets/ folder
+3. The app will automatically use it on the home screen
+
+Current fallback: Large soccer ball emoji (⚽) with floating animation
+
+Recommended image specs:
+- Format: PNG with transparency
+- Size: 280x280px minimum (can be larger, will scale down)
+- Style: 3D rendered sports balls similar to Figma design
