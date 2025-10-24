@@ -12,9 +12,9 @@ export const FOOTBALL_LEAGUES = [
   { sport: 'arg', name: 'Argentina Primera', country: 'Argentina', icon: '🇦🇷', leagueId: '4406', season: '2025', badge: 'https://r2.thesportsdb.com/images/media/league/badge/1vslha1589960216.png' },
   { sport: 'bra', name: 'Brazilian Serie A', country: 'Brazil', icon: '🇧🇷', leagueId: '4351', season: '2025', badge: 'https://r2.thesportsdb.com/images/media/league/badge/dmu4oq1753306626.png' },
   // UEFA Competitions
-  { sport: 'ucl', name: 'UEFA Champions League', country: 'Europe', icon: '🏆', leagueId: '4480', season: '2024-2025', badge: 'https://r2.thesportsdb.com/images/media/league/badge/mekkxr1561969122.png' },
-  { sport: 'uel', name: 'UEFA Europa League', country: 'Europe', icon: '🥈', leagueId: '4481', season: '2024-2025', badge: 'https://r2.thesportsdb.com/images/media/league/badge/7aq2xh1561970121.png' },
-  { sport: 'uec', name: 'UEFA Conference League', country: 'Europe', icon: '🥉', leagueId: '4490', season: '2024-2025', badge: 'https://r2.thesportsdb.com/images/media/league/badge/5e61to1621434910.png' },
+  { sport: 'ucl', name: 'UEFA Champions League', country: 'Europe', icon: '🏆', leagueId: '4480', season: '2024-2025', badge: 'https://r2.thesportsdb.com/images/media/league/badge/facv1u1742998896.png' },
+  { sport: 'uel', name: 'UEFA Europa League', country: 'Europe', icon: '🥈', leagueId: '4481', season: '2024-2025', badge: 'https://r2.thesportsdb.com/images/media/league/badge/mlsr7d1718774547.png' },
+  { sport: 'uec', name: 'UEFA Conference League', country: 'Europe', icon: '🥉', leagueId: '4490', season: '2024-2025', badge: 'https://r2.thesportsdb.com/images/media/league/badge/cwsp321698386224.png' },
   // International Competitions
   { sport: 'wc', name: 'FIFA World Cup', country: 'International', icon: '🌍', leagueId: '4429', season: '2026', badge: 'https://r2.thesportsdb.com/images/media/league/badge/e7er5g1696521789.png' },
   { sport: 'euro', name: 'UEFA Euro', country: 'Europe', icon: '🏆', leagueId: '4450', season: '2028', badge: 'https://r2.thesportsdb.com/images/media/league/badge/sqyqty1454525104.png' },
