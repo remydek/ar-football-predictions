@@ -22,8 +22,6 @@ export const polymarketAPI = {
         const params = {
           series_id: seriesId,
           closed: false,
-          order: 'end_date_min',
-          ascending: true,
           limit
         };
 
@@ -36,7 +34,7 @@ export const polymarketAPI = {
         });
       } else {
         // Use AllOrigins CORS proxy for local development
-        const apiUrl = `${API_BASE}/events?series_id=${seriesId}&closed=false&order=end_date_min&ascending=true&limit=${limit}`;
+        const apiUrl = `${API_BASE}/events?series_id=${seriesId}&closed=false&limit=${limit}`;
         const proxyUrl = `https://api.allorigins.win/raw?url=${encodeURIComponent(apiUrl)}`;
 
         console.log('[CLIENT] Local dev - using CORS proxy:', { apiUrl, proxyUrl });

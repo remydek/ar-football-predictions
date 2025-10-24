@@ -16,15 +16,13 @@ export default async function handler(req, res) {
   }
 
   try {
-    const { series_id, closed, order, ascending, limit } = req.query;
+    const { series_id, closed, limit } = req.query;
 
-    console.log('[API] Parsed query params:', { series_id, closed, order, ascending, limit });
+    console.log('[API] Parsed query params:', { series_id, closed, limit });
 
     const params = new URLSearchParams({
       series_id,
       closed: closed || 'false',
-      order: order || 'end_date_min',
-      ascending: ascending || 'true',
       limit: limit || '20'
     });
 
