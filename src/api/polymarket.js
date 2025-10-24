@@ -11,29 +11,54 @@ const api = axios.create({
 export const polymarketAPI = {
   // Fetch events for a specific league series
   async getLeagueEvents(seriesId, limit = 20) {
+    console.log('[CLIENT] getLeagueEvents called:', { seriesId, limit, IS_PRODUCTION });
+
     try {
       let response;
 
       if (IS_PRODUCTION) {
         // Use Vercel API proxy in production
-        response = await api.get(`/api/polymarket/events`, {
-          params: {
-            series_id: seriesId,
-            closed: false,
-            order: 'end_date_min',
-            ascending: true,
-            limit
-          }
+        const url = `/api/polymarket/events`;
+        const params = {
+          series_id: seriesId,
+          closed: false,
+          order: 'end_date_min',
+          ascending: true,
+          limit
+        };
+
+        console.log('[CLIENT] Production - calling Vercel API:', { url, params });
+        response = await api.get(url, { params });
+        console.log('[CLIENT] Production response:', {
+          status: response.status,
+          dataType: Array.isArray(response.data) ? 'array' : typeof response.data,
+          length: Array.isArray(response.data) ? response.data.length : 'N/A'
         });
       } else {
         // Use AllOrigins CORS proxy for local development
         const apiUrl = `${API_BASE}/events?series_id=${seriesId}&closed=false&order=end_date_min&ascending=true&limit=${limit}`;
-        response = await api.get(`https://api.allorigins.win/raw?url=${encodeURIComponent(apiUrl)}`);
+        const proxyUrl = `https://api.allorigins.win/raw?url=${encodeURIComponent(apiUrl)}`;
+
+        console.log('[CLIENT] Local dev - using CORS proxy:', { apiUrl, proxyUrl });
+        response = await api.get(proxyUrl);
+        console.log('[CLIENT] Local dev response:', {
+          status: response.status,
+          dataType: Array.isArray(response.data) ? 'array' : typeof response.data,
+          length: Array.isArray(response.data) ? response.data.length : 'N/A'
+        });
       }
 
       return response.data;
     } catch (error) {
-      console.error('Error fetching league events:', error);
+      console.error('[CLIENT] ERROR fetching league events:', {
+        message: error.message,
+        response: error.response ? {
+          status: error.response.status,
+          data: error.response.data
+        } : 'No response',
+        seriesId,
+        limit
+      });
       throw error;
     }
   },
