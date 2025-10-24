@@ -72,36 +72,57 @@ export const polymarketAPI = {
       awayTeam = vsMatch[2].trim();
     }
 
-    // Generate team badge URLs using TheSportsDB
+    // Generate team badge URLs
     const getTeamBadge = (teamName) => {
-      // Map common team name variations to their proper names
-      const teamMap = {
-        'Leeds United': 'Leeds',
-        'West Ham': 'West_Ham',
-        'Chelsea': 'Chelsea',
-        'Sunderland AFC': 'Sunderland',
-        'Manchester United': 'Man_Utd',
-        'Manchester City': 'Man_City',
-        'Liverpool': 'Liverpool',
-        'Arsenal': 'Arsenal',
-        'Tottenham': 'Tottenham',
-        'Newcastle United': 'Newcastle',
-        'Brighton': 'Brighton',
-        'Aston Villa': 'Aston_Villa',
-        'Everton': 'Everton',
-        'Fulham': 'Fulham',
-        'Crystal Palace': 'Crystal_Palace',
-        'Brentford': 'Brentford',
-        'Nottingham Forest': 'Nottingham',
-        'Wolverhampton': 'Wolves',
-        'Southampton': 'Southampton',
-        'Leicester City': 'Leicester',
-        'Ipswich Town': 'Ipswich',
-        'Bournemouth': 'Bournemouth',
+      // Use badge CDN that supports team names
+      const badgeMap = {
+        // Premier League 2025/26
+        'Leeds United': 'https://crests.football-data.org/341.png',
+        'Leeds': 'https://crests.football-data.org/341.png',
+        'West Ham': 'https://crests.football-data.org/563.png',
+        'West Ham United': 'https://crests.football-data.org/563.png',
+        'Chelsea': 'https://crests.football-data.org/61.png',
+        'Sunderland': 'https://crests.football-data.org/396.png',
+        'Sunderland AFC': 'https://crests.football-data.org/396.png',
+        'Manchester United': 'https://crests.football-data.org/66.png',
+        'Man Utd': 'https://crests.football-data.org/66.png',
+        'Manchester City': 'https://crests.football-data.org/65.png',
+        'Man City': 'https://crests.football-data.org/65.png',
+        'Liverpool': 'https://crests.football-data.org/64.png',
+        'Arsenal': 'https://crests.football-data.org/57.png',
+        'Tottenham': 'https://crests.football-data.org/73.png',
+        'Tottenham Hotspur': 'https://crests.football-data.org/73.png',
+        'Spurs': 'https://crests.football-data.org/73.png',
+        'Newcastle': 'https://crests.football-data.org/67.png',
+        'Newcastle United': 'https://crests.football-data.org/67.png',
+        'Brighton': 'https://crests.football-data.org/397.png',
+        'Brighton & Hove Albion': 'https://crests.football-data.org/397.png',
+        'Aston Villa': 'https://crests.football-data.org/58.png',
+        'Everton': 'https://crests.football-data.org/62.png',
+        'Fulham': 'https://crests.football-data.org/63.png',
+        'Crystal Palace': 'https://crests.football-data.org/354.png',
+        'Brentford': 'https://crests.football-data.org/402.png',
+        'Nottingham Forest': 'https://crests.football-data.org/351.png',
+        'Nottingham': 'https://crests.football-data.org/351.png',
+        'Wolverhampton': 'https://crests.football-data.org/76.png',
+        'Wolves': 'https://crests.football-data.org/76.png',
+        'Southampton': 'https://crests.football-data.org/340.png',
+        'Leicester': 'https://crests.football-data.org/338.png',
+        'Leicester City': 'https://crests.football-data.org/338.png',
+        'Ipswich': 'https://crests.football-data.org/349.png',
+        'Ipswich Town': 'https://crests.football-data.org/349.png',
+        'Bournemouth': 'https://crests.football-data.org/1044.png',
+        'AFC Bournemouth': 'https://crests.football-data.org/1044.png',
+        // Dutch Eredivisie
+        'Feyenoord': 'https://crests.football-data.org/670.png',
+        'Feyenoord Rotterdam': 'https://crests.football-data.org/670.png',
+        'PSV': 'https://crests.football-data.org/674.png',
+        'PSV Eindhoven': 'https://crests.football-data.org/674.png',
+        'Ajax': 'https://crests.football-data.org/678.png',
+        'AFC Ajax': 'https://crests.football-data.org/678.png',
       };
 
-      const mappedName = teamMap[teamName] || teamName.replace(/\s+/g, '_');
-      return `https://resources.premierleague.com/premierleague/badges/70/t${this.getTeamId(teamName)}.png`;
+      return badgeMap[teamName] || `https://via.placeholder.com/70x70/cccccc/666666?text=${encodeURIComponent(teamName.substring(0, 3))}`;
     };
 
     return {
@@ -115,45 +136,5 @@ export const polymarketAPI = {
       image: event.image,
       slug: event.slug,
     };
-  },
-
-  // Get Premier League team IDs
-  getTeamId(teamName) {
-    const teamIds = {
-      'Leeds': '7',
-      'Leeds United': '7',
-      'West Ham': '21',
-      'Chelsea': '4',
-      'Sunderland': '56',
-      'Sunderland AFC': '56',
-      'Manchester United': '1',
-      'Man Utd': '1',
-      'Manchester City': '43',
-      'Man City': '43',
-      'Liverpool': '10',
-      'Arsenal': '3',
-      'Tottenham': '6',
-      'Tottenham Hotspur': '6',
-      'Newcastle': '23',
-      'Newcastle United': '23',
-      'Brighton': '131',
-      'Aston Villa': '7',
-      'Everton': '11',
-      'Fulham': '54',
-      'Crystal Palace': '31',
-      'Brentford': '94',
-      'Nottingham Forest': '17',
-      'Nottingham': '17',
-      'Wolverhampton': '39',
-      'Wolves': '39',
-      'Southampton': '20',
-      'Leicester': '13',
-      'Leicester City': '13',
-      'Ipswich': '40',
-      'Ipswich Town': '40',
-      'Bournemouth': '91',
-    };
-
-    return teamIds[teamName] || '1';
   }
 };
