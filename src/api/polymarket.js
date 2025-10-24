@@ -1,6 +1,7 @@
 import axios from 'axios';
 
 const API_BASE = 'https://gamma-api.polymarket.com';
+const IS_PRODUCTION = import.meta.env.PROD;
 
 // Create axios instance
 const api = axios.create({
@@ -11,16 +12,25 @@ export const polymarketAPI = {
   // Fetch events for a specific league series
   async getLeagueEvents(seriesId, limit = 20) {
     try {
-      // Use API proxy route to avoid CORS
-      const response = await api.get(`/api/polymarket/events`, {
-        params: {
-          series_id: seriesId,
-          closed: false,
-          order: 'end_date_min',
-          ascending: true,
-          limit
-        }
-      });
+      let response;
+
+      if (IS_PRODUCTION) {
+        // Use Vercel API proxy in production
+        response = await api.get(`/api/polymarket/events`, {
+          params: {
+            series_id: seriesId,
+            closed: false,
+            order: 'end_date_min',
+            ascending: true,
+            limit
+          }
+        });
+      } else {
+        // Use AllOrigins CORS proxy for local development
+        const apiUrl = `${API_BASE}/events?series_id=${seriesId}&closed=false&order=end_date_min&ascending=true&limit=${limit}`;
+        response = await api.get(`https://api.allorigins.win/raw?url=${encodeURIComponent(apiUrl)}`);
+      }
+
       return response.data;
     } catch (error) {
       console.error('Error fetching league events:', error);
